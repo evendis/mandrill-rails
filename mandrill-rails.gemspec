@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["gallagher.paul@gmail.com"]
   gem.description   = %q{Rails integration for working with Mandrill}
   gem.summary       = %q{Rails integration for working with Mandrill}
-  gem.homepage      = ""
+  gem.homepage      = "https://github.com/evendis/mandrill-rails"
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
