@@ -1,0 +1,55 @@
+= Mandrill::Rails
+
+Mandrill::Rails extends the capabilities of the
+{Mandrill}[https://github.com/tatemae-consultancy/mandrill] gem to provide tighter integration for Rails projects.
+
+The primary goal of Mandrill::Rails is to make supporting Mandrill web hooks as easy and Rails-native as possible. As other opportunities for better Rails integration of the Mandrill API are discovered, these may be rolled in too.
+
+FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the same folks who do MailChimp.
+
+== Requirements and Known Limitations
+
+* Tested with MRI 1.9.3
+* Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency
+
+== The Mandrill::Rails Cookbook
+
+=== How do I install it for normal use?
+
+Add this line to your application's Gemfile:
+
+    gem 'mandrill-rails'
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install mandrill-rails
+
+=== How do I install it for gem development?
+
+If you want to work on enhancements of fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run <tt>bundle</tt> to install development dependencies.
+
+See the section below on 'Contributing to Mandrill::Rails' for more information.
+
+=== How do I use Mandrill gem features with Mandrill::Rails?
+
+{Mandrill}[https://github.com/tatemae-consultancy/mandrill] is included with Mandrill::Rails and its behaviour is unchanged.
+You can use all the features of the Mandrill gem as normal.
+
+== Contributing to Mandrill::Rails
+
+* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
+* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
+* Fork the project
+* Start a feature/bugfix branch
+* Commit and push until you are happy with your contribution
+* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
+* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+
+== Copyright
+
+Copyright (c) 2012 Paul Gallagher. See LICENSE for further details.
+

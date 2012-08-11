@@ -4,8 +4,8 @@ require File.expand_path('../lib/mandrill-rails/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Paul Gallagher"]
   gem.email         = ["gallagher.paul@gmail.com"]
-  gem.description   = %q{TODO: Write a gem description}
-  gem.summary       = %q{TODO: Write a gem summary}
+  gem.description   = %q{Rails integration for working with Mandrill}
+  gem.summary       = %q{Rails integration for working with Mandrill}
   gem.homepage      = ""
 
   gem.files         = `git ls-files`.split($\)
@@ -14,4 +14,12 @@ Gem::Specification.new do |gem|
   gem.name          = "mandrill-rails"
   gem.require_paths = ["lib"]
   gem.version       = Mandrill::Rails::VERSION
+
+  gem.add_runtime_dependency(%q<mandrill>, ["~> 0.0.2"])
+  gem.add_development_dependency(%q<bundler>, ["~> 1.1.4"])
+  gem.add_development_dependency(%q<rake>, ["~> 0.9.2.2"])
+  gem.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
+  gem.add_development_dependency(%q<rdoc>, ["~> 3.11"])
+  gem.add_development_dependency(%q<guard-rspec>, ["~> 1.2.0"])
+
 end
