@@ -1,9 +1,7 @@
 require 'json'
-require "mandrill-rails/version"
-require 'mandrill/web_hook/event_decorator'
+require 'active_support/concern'
+require 'active_support/dependencies'
 
-module Mandrill
-  module Rails
-    # Your code goes here...
-  end
-end
+require "mandrill-rails/version"
+require 'mandrill/web_hook'
+require 'mandrill-rails/web_hook_processor'

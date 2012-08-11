@@ -16,6 +16,7 @@ Gem::Specification.new do |gem|
   gem.version       = Mandrill::Rails::VERSION
 
   gem.add_runtime_dependency(%q<mandrill>, ["~> 0.0.2"])
+  gem.add_runtime_dependency(%q<activesupport>, [">= 3.0.3"])
   gem.add_development_dependency(%q<bundler>, ["~> 1.1.4"])
   gem.add_development_dependency(%q<rake>, ["~> 0.9.2.2"])
   gem.add_development_dependency(%q<rspec>, ["~> 2.8.0"])
