@@ -1,4 +1,4 @@
-= Mandrill::Rails
+= Mandrill::Rails {<img src="https://secure.travis-ci.org/evendis/mandrill-rails.png" />}[http://travis-ci.org/evendis/mandrill-rails]
 
 Mandrill::Rails extends the capabilities of the
 {Mandrill}[https://github.com/tatemae-consultancy/mandrill] gem to provide tighter integration for Rails projects.
