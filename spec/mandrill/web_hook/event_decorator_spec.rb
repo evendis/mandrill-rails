@@ -13,8 +13,11 @@ describe Mandrill::WebHook::EventDecorator do
     let(:sender_email) { 'test@example.com' }
     let(:message_text) { "raw message text\n\n" }
     let(:message_html) { "<div>some content</div>" }
-    let(:message_raw) { "the raw message text" }
-    let(:message_id) { "1234567890" }
+    let(:message_raw)  { "the raw message text" }
+    let(:message_id)   { "<111111>" }
+    let(:in_reply_to)  { "<222222>" }
+    let(:references)   { "<222222> <333333>" }
+    let(:references_array) { ["<222222>","<333333>"] }
 
     let(:raw_event) { {
       'event' => event_type,
@@ -23,7 +26,9 @@ describe Mandrill::WebHook::EventDecorator do
         'subject' => subject_line,
         'headers' => {
           'Cc' => "c@example.com,b@example.com",
-          'Message-Id' => message_id
+          'Message-Id' => message_id,
+          'In-Reply-To' => in_reply_to,
+          'References' => references
         },
         'html' => message_html,
         'raw_msg' => message_raw,
@@ -38,6 +43,8 @@ describe Mandrill::WebHook::EventDecorator do
     its(:sender_email) { should eql(sender_email) }
     its(:recipients) { should eql([["a@example.com", "A"], ["b@example.com", nil], ["c@example.com", "C"]]) }
     its(:message_id) { should eql(message_id) }
+    its(:in_reply_to) { should eql(in_reply_to) }
+    its(:references) { should eql(references_array) }
 
     describe "#recipient_emails" do
       its(:recipient_emails) { should eql(["a@example.com", "b@example.com", "c@example.com"]) }

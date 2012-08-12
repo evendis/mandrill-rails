@@ -30,6 +30,16 @@ class Mandrill::WebHook::EventDecorator < Hash
     headers['Message-Id']
   end
 
+  # Returns the reply-to ID (as used for inbound messages )
+  def in_reply_to
+    headers['In-Reply-To']
+  end
+
+  # Returns an array of reference IDs (as used for inbound messages )
+  def references
+    (headers['References']||[]).scan(/(<[^<]+?>)/).flatten
+  end
+
   # Returns the headers Hash (as used for inbound messages )
   def headers
     msg['headers']||{}
