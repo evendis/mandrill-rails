@@ -44,7 +44,14 @@ describe Mandrill::WebHook::EventDecorator do
     its(:recipients) { should eql([["a@example.com", "A"], ["b@example.com", nil], ["c@example.com", "C"]]) }
     its(:message_id) { should eql(message_id) }
     its(:in_reply_to) { should eql(in_reply_to) }
-    its(:references) { should eql(references_array) }
+
+    describe "#references" do
+      its(:references) { should eql(references_array) }
+      context "when no references element" do
+        let(:raw_event) { {} }
+        its(:references) { should eql([]) }
+      end
+    end
 
     describe "#recipient_emails" do
       its(:recipient_emails) { should eql(["a@example.com", "b@example.com", "c@example.com"]) }

@@ -37,7 +37,7 @@ class Mandrill::WebHook::EventDecorator < Hash
 
   # Returns an array of reference IDs (as used for inbound messages )
   def references
-    (headers['References']||[]).scan(/(<[^<]+?>)/).flatten
+    (headers['References']||'').scan(/(<[^<]+?>)/).flatten
   end
 
   # Returns the headers Hash (as used for inbound messages )
