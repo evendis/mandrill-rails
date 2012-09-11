@@ -13,6 +13,10 @@ FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the 
 * Requires Rails >= 3.0.3 (including 3.1 and 3.2)
 * Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency
 
+Food for thought (upcoming features maybe)..
+* some generators may be handy to avoid the manual coding to hook up web hooks
+* I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
+
 == The Mandrill::Rails Cookbook
 
 === How do I install it for normal use?
@@ -35,10 +39,78 @@ If you want to work on enhancements of fix bugs in Mandrill::Rails, fork and clo
 
 See the section below on 'Contributing to Mandrill::Rails' for more information.
 
+=== How do I configure my app for incoming Mandrill WebHooks?
+
+Say we have configured Mandrill to send requests to /inbox at our site (see the next recipes for how you do that).
+
+Once we have Mandrill::Rails in our project, we just need to do two things. There's no generator to help you do this at the moment, but it is pretty simple:
+
+First, configure a resource route:
+
+    resource :inbox, :controller => 'inbox', :only => [:show,:create]
+
+Next, create the corresponding controller:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+    end
+
+That's all for the basic do-nothing endpoint setup. Note that we need both the GET and POST routes (Mandrill sends data to the POST route, but it uses GET to test the availability of the endpoint).
+
+You can setup as many of these controllers as you need, if you wish different types of events to be handled by different routes.
+
+=== How do I configure Mandrill to send inbound email to my app?
+
+See {Mandrill Inbound Domains}[https://mandrillapp.com/inbound]
+* enter the mail route you want to match on e.g. *@app.mydomain.com
+* set the WebHook enpoint to match e.g. http://mydomain.com/inbox
+
+=== How do I configure Mandrill to send WebHook requests to my app?
+
+See {Mandrill WebHooks}[https://mandrillapp.com/settings/webhooks]
+* select the events you want to trigger on
+* set the "Post to URL" to point to your controller e.g. http://mydomain.com/inbox
+
+=== How do I handle a specific Mandrill event payload in my app?
+
+Once you have configured Mandrill and setup your routes and controllers, we can successfully
+receive WebHook event notifications from Mandrill. But we are not doing anything with the payload yet.
+
+To handle specific Mandrill event payloads, we just need to implement a handler for each event type
+we are interested in.
+
+The list of available event types includes: inbound, send, hard_bounce, soft_bounce, open,
+click, spam, unsub, and reject.
+
+In our controller, we simply write a method called handle_<event-type> and it will be called
+for each event payload received. The event payload will be passed to this method
+as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
+help extract payload-specific elements.
+
+For example, to handle inbound email:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+
+      def handle_inbound(event_payload)
+        Item.save_inbound_mail(event_payload)
+      end
+
+    end
+
+If the handling of the payload may be time-consuming, you could throw it onto a background
+queue at this point instead.
+
+Note that Mandrill may send multiple event payloads in a single request, but you don't need
+to worry about that. Each event payload will be unpacked from the request and dispatched to
+your handler individually.
+
+And if you don't care to handle a specific payload type - then just don't implement the associated handler.
+
 === How do I use Mandrill gem features with Mandrill::Rails?
 
-{Mandrill}[https://github.com/tatemae-consultancy/mandrill] is included with Mandrill::Rails and its behaviour is unchanged.
-You can use all the features of the Mandrill gem as normal.
+{Mandrill}[https://github.com/tatemae-consultancy/mandrill] is included with Mandrill::Rails
+and its behaviour is unchanged. You can use all the features of the Mandrill gem as normal.
 
 == Contributing to Mandrill::Rails
 
