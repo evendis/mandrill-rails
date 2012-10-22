@@ -1,0 +1,29 @@
+[
+  {
+    "event": "inbound",
+    "msg": {
+      "email": "from@example.com",
+      "from_email": "from@example.com",
+      "from_name": "From Name ",
+      "headers": {
+        "Content-Type": "multipart/alternative; boundary=e0cb4efe2faee9b97304c6d0647b",
+        "Date": "Thu, 9 Aug 2012 15:44:15 +0800",
+        "Dkim-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20120113; h=mime-version:date:message-id:subject:from:to:content-type; bh=9/e4o7vsyI5eIM2MUze13ZWWdxyhC7cxjHwrHXPSEJQ=; b=HOb83u8i6ai3HuT61C+NfQcUHqATH+/ivAjZ2pD/MXcCFboOyN9LGeMHm+RhwnL+Ap mC0R9+eqlWaoxqd6ugrvtNOQ1Kvb9LunPnnMwY06KZKpoXCVwFrzT3e2f8JgLwyAxpUv G0srziHwpuCh/y42dJ83tKhctHc6w6GKC79H1WBAcexnjvk0LgrkOnNJ/iBCOznjs35o V4jfjlJBeZLvxcnEJ5Xxade2kWbLZ9TWiuVfTS6xUyVb/gfn5x9D1KjCUb1Gwq9wYJ4m UxH6oC5f3mkM+NZ6oDBmJFDdVxg23rRaMrF4YBpVGj+6+pjF36N8CrmtaDOJNVqCS5FN koSw==",
+        "From": "From Name <from@example.com>",
+        "Message-Id": "<CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>",
+        "Mime-Version": "1.0",
+        "Received": [ "from mail-lpp01m010-f51.google.com (mail-lpp01m010-f51.google.com [209.85.215.51]) by app01.transact (Postfix) with ESMTPS id F01841E0010A for <to@example.com>; Thu, 9 Aug 2012 03:44:16 -0400 (EDT)", "by lahe6 with SMTP id e6so79326lah.24 for <to@example.com>; Thu, 09 Aug 2012 00:44:15 -0700 (PDT)", "by 10.112.43.67 with SMTP id u3mr382471lbl.16.1344498255378; Thu, 09 Aug 2012 00:44:15 -0700 (PDT)", "by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:44:15 -0700 (PDT)" ],
+        "Subject": "[inbound] Sample Subject",
+        "To": "to@example.com"
+      },
+      "html": "multi-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n",
+      "raw_msg": "Received: from mail-lpp01m010-f51.google.com (mail-lpp01m010-f51.google.com [209.85.215.51])\n\tby app01.transact (Postfix) with ESMTPS id F01841E0010A\n\tfor <to@example.com>; Thu, 9 Aug 2012 03:44:16 -0400 (EDT)\nReceived: by lahe6 with SMTP id e6so79326lah.24\n for <to@example.com>; Thu, 09 Aug 2012 00:44:15 -0700 (PDT)\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\n d=gmail.com; s=20120113;\n h=mime-version:date:message-id:subject:from:to:content-type;\n bh=9/e4o7vsyI5eIM2MUze13ZWWdxyhC7cxjHwrHXPSEJQ=;\n b=HOb83u8i6ai3HuT61C+NfQcUHqATH+/ivAjZ2pD/MXcCFboOyN9LGeMHm+RhwnL+Ap\n mC0R9+eqlWaoxqd6ugrvtNOQ1Kvb9LunPnnMwY06KZKpoXCVwFrzT3e2f8JgLwyAxpUv\n G0srziHwpuCh/y42dJ83tKhctHc6w6GKC79H1WBAcexnjvk0LgrkOnNJ/iBCOznjs35o\n V4jfjlJBeZLvxcnEJ5Xxade2kWbLZ9TWiuVfTS6xUyVb/gfn5x9D1KjCUb1Gwq9wYJ4m\n UxH6oC5f3mkM+NZ6oDBmJFDdVxg23rRaMrF4YBpVGj+6+pjF36N8CrmtaDOJNVqCS5FN\n koSw==\nMIME-Version: 1.0\nReceived: by 10.112.43.67 with SMTP id u3mr382471lbl.16.1344498255378; Thu, 09\n Aug 2012 00:44:15 -0700 (PDT)\nReceived: by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:44:15 -0700 (PDT)\nDate: Thu, 9 Aug 2012 15:44:15 +0800\nMessage-ID: <CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>\nSubject: [inbound] Sample Subject\nFrom: From Name <from@example.com>\nTo: to@example.com\nContent-Type: multipart/alternative; boundary=e0cb4efe2faee9b97304c6d0647b\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/plain; charset=UTF-8\n\nmulti-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/html; charset=UTF-8\n\nmulti-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n--e0cb4efe2faee9b97304c6d0647b--\n",
+      "sender": null,
+      "subject": "[inbound] Sample Subject",
+      "tags": [],
+      "text": "multi-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n",
+      "to": [ [ "to@example.com", null ] ]
+    },
+    "ts": 1344498257
+  }
+]

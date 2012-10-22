@@ -1,0 +1,36 @@
+[
+  {
+    "event": "inbound",
+    "msg": {
+      "cc": [ [ "cc@example.com", null ] ],
+      "email": "from@example.com",
+      "from_email": "from@example.com",
+      "from_name": "From Name ",
+      "headers": {
+        "Cc": "cc@example.com",
+        "Content-Type": "multipart/alternative; boundary=f46d040838d398472904c6d067c6",
+        "Date": "Thu, 9 Aug 2012 15:45:00 +0800",
+        "Dkim-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20120113; h=mime-version:date:message-id:subject:from:to:cc:content-type; bh=hZurAGSA3OJIqtMOebHDdMvqss5GY1RDg7kV68+nvN8=; b=g9eCMb+rDV2RIp8stEri4PjLRHqxPECKEJcP/uMEcWZcWqDOlV9QBlOUAptAHMDv1F tIbDJBx+59t5q1hMr2sfn8CUl4T1oaXZq9Gu3SvGxlLX4HFGEQZBAUq+kfW+M8mNWHs9 SkNxsO1gmgjuht1hGOP4rxkEj/tRM+NXBiqB8UOzaF3BBI/NtjjKjbLu+VshGadTDoeQ ayQ6d6r5Sl+BE0PNLF65H8WJF0VyzTsTOSKAynRGGoLCaO+gzgxSwQe5+w9spw0SMSRY +it9DSZm1en+BsfMNlcbkUqN5a9ova+q4whSjdq4NoTrCaZS/6ZTVbBjc/HK2IQYQI4/ CTDw==",
+        "From": "From Name <from@example.com>",
+        "Message-Id": "<CAGBx7GhsVk7Q-aO-FQ-m+Oix7GQyEVHyL60qv0__G8EpH8pA4w@mail.gmail.com>",
+        "In-Reply-To": "<CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>",
+        "References": "<CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com> <9999999999999@mail.gmail.com>",
+        "Mime-Version": "1.0",
+        "Received": [ "from mail-lb0-f179.google.com (mail-lb0-f179.google.com [209.85.217.179]) by app01.transact (Postfix) with ESMTPS id E94801E000B8 for <to@example.com>; Thu, 9 Aug 2012 03:45:01 -0400 (EDT)",
+        "by lbao2 with SMTP id o2so118681lba.24 for <to@example.com>; Thu, 09 Aug 2012 00:45:00 -0700 (PDT)",
+        "by 10.152.112.233 with SMTP id it9mr20848692lab.40.1344498300372; Thu, 09 Aug 2012 00:45:00 -0700 (PDT)",
+        "by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:45:00 -0700 (PDT)" ],
+        "Subject": "[inbound] Sample Subject 2",
+        "To": "to@example.com, Other To <other.to@example.com>"
+      },
+      "html": "asfasdf<br>asdf<br>asdf<br>asdf<br>asdf<br>\n\n",
+      "raw_msg": "Received: from mail-lb0-f179.google.com (mail-lb0-f179.google.com [209.85.217.179])\n\tby app01.transact (Postfix) with ESMTPS id E94801E000B8\n\tfor <to@example.com>; Thu, 9 Aug 2012 03:45:01 -0400 (EDT)\nReceived: by lbao2 with SMTP id o2so118681lba.24\n for <to@example.com>; Thu, 09 Aug 2012 00:45:00 -0700 (PDT)\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\n d=gmail.com; s=20120113;\n h=mime-version:date:message-id:subject:from:to:cc:content-type;\n bh=hZurAGSA3OJIqtMOebHDdMvqss5GY1RDg7kV68+nvN8=;\n b=g9eCMb+rDV2RIp8stEri4PjLRHqxPECKEJcP/uMEcWZcWqDOlV9QBlOUAptAHMDv1F\n tIbDJBx+59t5q1hMr2sfn8CUl4T1oaXZq9Gu3SvGxlLX4HFGEQZBAUq+kfW+M8mNWHs9\n SkNxsO1gmgjuht1hGOP4rxkEj/tRM+NXBiqB8UOzaF3BBI/NtjjKjbLu+VshGadTDoeQ\n ayQ6d6r5Sl+BE0PNLF65H8WJF0VyzTsTOSKAynRGGoLCaO+gzgxSwQe5+w9spw0SMSRY\n +it9DSZm1en+BsfMNlcbkUqN5a9ova+q4whSjdq4NoTrCaZS/6ZTVbBjc/HK2IQYQI4/\n CTDw==\nMIME-Version: 1.0\nReceived: by 10.152.112.233 with SMTP id it9mr20848692lab.40.1344498300372;\n Thu, 09 Aug 2012 00:45:00 -0700 (PDT)\nReceived: by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:45:00 -0700 (PDT)\nDate: Thu, 9 Aug 2012 15:45:00 +0800\nMessage-ID: <CAGBx7GhsVk7Q-aO-FQ-m+Oix7GQyEVHyL60qv0__G8EpH8pA4w@mail.gmail.com>\nSubject: [inbound] Sample Subject 2\nFrom: From Name <from@example.com>\nTo: to@example.com, Other To <other.to@example.com>\nCc: cc@example.com\nContent-Type: multipart/alternative; boundary=f46d040838d398472904c6d067c6\n\n--f46d040838d398472904c6d067c6\nContent-Type: text/plain; charset=UTF-8\n\nasfasdf\nasdf\nasdf\nasdf\nasdf\n\n--f46d040838d398472904c6d067c6\nContent-Type: text/html; charset=UTF-8\n\nasfasdf<br>asdf<br>asdf<br>asdf<br>asdf<br>\n\n--f46d040838d398472904c6d067c6--\n",
+      "sender": null,
+      "subject": "[inbound] Sample Subject 2",
+      "tags": [],
+      "text": "asfasdf\nasdf\nasdf\nasdf\nasdf\n\n",
+      "to": [ [ "to@example.com,", null ], [ "other.to@example.com", " Other To " ] ]
+    },
+    "ts": 1344498302
+  }
+]

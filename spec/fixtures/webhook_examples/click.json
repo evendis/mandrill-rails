@@ -1,0 +1,24 @@
+[
+  {
+    "event": "click",
+    "msg": {
+      "_id": "8606637.6692f6cac28e45a9b371e182d5ca0a35",
+      "_version": 5,
+      "clicks": [
+        { "ts": 1350347773, "url": "http://feedproxy.google.com/~r/readwriteweb/~3/rqUHtsdBCzc/saturday-night-live-sketch-skewers-iphone-5-and-the-tech-press-video.php" },
+        { "ts": 1350377171, "url": "http://feedproxy.google.com/~r/readwriteweb/~3/MMUCngEPdSU/now-you-can-search-your-email-docs-spreadsheets-from-the-main-google-box.php" },
+        { "ts": 1350377231, "url": "http://feedproxy.google.com/~r/readwriteweb/~3/KemlM1hZvdI/how-evil-is-your-smartphone.php" },
+        { "ts": 1350377135, "url": "http://feedproxy.google.com/~r/readwriteweb/~3/op1uGAwjnFo/fix-your-iphones-maps-reminders-with-localscope-3.php" }
+      ],
+      "email": "to@example.com",
+      "opens": [ { "ts": 1350347773 } ],
+      "sender": "from@example.com",
+      "state": "sent",
+      "subject": "[click] Sample Subject",
+      "tags": [],
+      "ts": 1350345672
+    },
+    "ts": 1350377135,
+    "url": "http://feedproxy.google.com/~r/readwriteweb/~3/op1uGAwjnFo/fix-your-iphones-maps-reminders-with-localscope-3.php"
+  }
+]

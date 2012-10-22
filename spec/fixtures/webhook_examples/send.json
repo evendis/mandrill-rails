@@ -1,0 +1,17 @@
+[
+  {
+    "event": "send",
+    "msg": {
+      "_id": "9a32184309ad4d5e9bfd20368d9d7981",
+      "clicks": [],
+      "email": "to@example.com",
+      "opens": [],
+      "sender": "from@example.com",
+      "state": "sent",
+      "subject": "[send] Sample Subject",
+      "tags": [],
+      "ts": 1350691301
+    },
+    "ts": 1350691301
+  }
+]

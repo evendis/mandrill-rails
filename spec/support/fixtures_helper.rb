@@ -1,0 +1,25 @@
+require 'pathname'
+require 'json'
+
+module FixturesHelper
+
+  def webhook_examples_path
+    Pathname.new(File.dirname(__FILE__)).join('..','fixtures','webhook_examples')
+  end
+
+  # Returns the JSON representation of an array of +sample_name+ events
+  def webhook_example_events(sample_name)
+    sample_path = webhook_examples_path.join("#{sample_name}.json")
+    JSON.parse(sample_path.read)
+  end
+
+  # Returns the JSON representation of an +sample_name+ event
+  def webhook_example_event(sample_name)
+    webhook_example_events(sample_name).first
+  end
+end
+
+
+RSpec.configure do |conf|
+  conf.include FixturesHelper
+end
