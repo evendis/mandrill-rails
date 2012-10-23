@@ -4,8 +4,8 @@ require File.expand_path('../lib/mandrill-rails/version', __FILE__)
 Gem::Specification.new do |gem|
   gem.authors       = ["Paul Gallagher"]
   gem.email         = ["gallagher.paul@gmail.com"]
-  gem.description   = %q{Rails integration for working with Mandrill}
-  gem.summary       = %q{Rails integration for working with Mandrill}
+  gem.description   = %q{Rails integration for Mandrill}
+  gem.summary       = %q{Provides webhook processing and event decoration to make using Mandrill with Rails just that much easier}
   gem.homepage      = "https://github.com/evendis/mandrill-rails"
 
   gem.files         = `git ls-files`.split($\)
