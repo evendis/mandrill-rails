@@ -130,7 +130,7 @@ some are included in the project source under spec/fixtures/webhook_examples.
 In addition to prividing full Hash-like access to the raw message, the `event_payload` object
 (a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
 things you might need to do with the payload. Here are some examples (see
-{Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/0.0.2/Mandrill/WebHook/EventDecorator]
+{Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator]
 for full details)
 
     event_payload.message_id
