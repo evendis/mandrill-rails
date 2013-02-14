@@ -16,7 +16,7 @@ describe Mandrill::WebHook::EventDecorator do
   # * soft_bounce - message has soft bounced
   # * spam - recipient marked a message as spam
   # * unsub - recipient unsubscribed
-  # http://goingon.in/inbox
+  #
   {
     'inbound' => {
       :event_type => 'inbound',
