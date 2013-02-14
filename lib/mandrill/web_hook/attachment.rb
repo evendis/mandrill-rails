@@ -26,12 +26,13 @@ class Mandrill::WebHook::Attachment < Hash
 
   # Returns the decoded content for the attachment
   def decoded_content
-    case type
-    when 'text/plain'
+    if type =~ /^text/
       content
     else # assume it is base64-encoded
       Base64.decode64(content)
     end
+  rescue # any decoding error, just return the content
+    content
   end
 
 end
