@@ -73,15 +73,15 @@ class Mandrill::WebHook::EventDecorator < Hash
     msg['email']
   end
 
-  # Returns an array of all unique recipient emails (to/cc)
-  #   [ email, email, .. ]
+  # Returns an array of all unique recipients (to/cc)
+  #   [ [email,name], [email,name], .. ]
   # Applicable events: inbound
   def recipients
     (Array(msg['to']) | Array(msg['cc'])).compact
   end
 
-  # Returns an array of all unique recipients (to/cc)
-  #   [ [email,name], [email,name], .. ]
+  # Returns an array of all unique recipient emails (to/cc)
+  #   [ email, email, .. ]
   # Applicable events: inbound
   def recipient_emails
     recipients.map(&:first)

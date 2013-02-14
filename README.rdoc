@@ -73,7 +73,7 @@ See {Mandrill WebHooks}[https://mandrillapp.com/settings/webhooks]
 
 === How do I handle a specific Mandrill event payload in my app?
 
-Once you have configured Mandrill and setup your routes and controllers, we can successfully
+Once we have configured Mandrill and setup our routes and controllers, our app will successfully
 receive WebHook event notifications from Mandrill. But we are not doing anything with the payload yet.
 
 To handle specific Mandrill event payloads, we just need to implement a handler for each event type
@@ -82,7 +82,7 @@ we are interested in.
 The list of available event types includes: inbound, send, hard_bounce, soft_bounce, open,
 click, spam, unsub, and reject.
 
-In our controller, we simply write a method called handle_<event-type> and it will be called
+In our controller, we simply write a method called `handle_<event-type>` and it will be called
 for each event payload received. The event payload will be passed to this method
 as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
@@ -106,6 +106,85 @@ to worry about that. Each event payload will be unpacked from the request and di
 your handler individually.
 
 And if you don't care to handle a specific payload type - then just don't implement the associated handler.
+
+=== How do I pull apart the event_payload?
+
+The `event_payload` object passed to our handler represents a single event and is packaged
+as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
+help extract payload-specific elements.
+
+You can use it as a Hash (with String keys) to access all of the native elements of the specific event, for example:
+
+    event_payload['event']
+    => "click"
+    event_payload['ts']
+    => 1350377135
+    event_payload['msg']
+    => {...}
+
+If you would like examples of the actual data structures sent by Mandrill for different event types,
+some are included in the project source under spec/fixtures/webhook_examples.
+
+=== What additional methods does event_payload provide to help extract payload-specific elements?
+
+In addition to prividing full Hash-like access to the raw message, the `event_payload` object
+(a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
+things you might need to do with the payload. Here are some examples (see
+{Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/0.0.2/Mandrill/WebHook/EventDecorator]
+for full details)
+
+    event_payload.message_id
+    # Returns the message_id.
+    # Inbound events: references 'Message-Id' header.
+    # Send/Open/Click events: references '_id' message attribute.
+
+    event_payload.user_email
+    # Returns the subject user email address.
+    # Inbound messages: references 'email' message attribute (represents the sender).
+    # Send/Open/Click messages: references 'email' message attribute (represents the recipient).
+
+    event_payload.references
+    # Returns an array of reference IDs.
+    # Applicable events: inbound
+
+    event_payload.recipients
+    # Returns an array of all unique recipients (to/cc)
+    #   [ [email,name], [email,name], .. ]
+    # Applicable events: inbound
+
+    event_payload.recipient_emails
+    # Returns an array of all unique recipient emails (to/cc)
+    #   [ email, email, .. ]
+    # Applicable events: inbound
+
+
+=== How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
+
+It's quite likely you may benefit from adding more application-specific intelligence to the
+`event_payload` object.
+
+There are many ways to do this, but it is quite legitimate to reopen the EventDecorator class and add your own methods
+if you wish.
+
+For example `event_payload.user_email` returns the subject user email address, but perhaps I will commonly want to
+match that with a user record in my system. Or I similarly want to resolve `event_payload.recipient_emails` to user records.
+In this case, I could extend EventDecorator in my app like this:
+
+    # Extends Mandrill::WebHook::EventDecorator with app-specific event payload transformation
+    class Mandrill::WebHook::EventDecorator
+
+      # Returns the user record for the subject user (if available)
+      def user
+        User.where(email: user_email).first
+      end
+
+      # Returns user records for all to/cc recipients
+      def recipient_users
+        User.where(email: recipient_emails)
+      end
+
+    end
+
 
 === How do I use Mandrill gem features with Mandrill::Rails?
 
