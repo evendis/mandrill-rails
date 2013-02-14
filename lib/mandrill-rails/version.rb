@@ -1,7 +1,7 @@
 module Mandrill
   module Rails
-    unless defined?(VERSION)
-      VERSION = "0.0.2"
-    end
   end
+end
+unless defined?(Mandrill::Rails::VERSION)
+  Mandrill::Rails::VERSION = "0.0.2"
 end
