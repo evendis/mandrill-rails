@@ -182,13 +182,11 @@ describe Mandrill::WebHook::EventDecorator do
       its(:count) { should eql(1) }
       describe "attachment" do
         subject { event_payload.attachments.first }
-        it { subject['name'].should eql('sample.txt') }
-        it { subject['type'].should eql('text/plain') }
-        it { subject['content'].should eql("This is \na sample\ntext file\n") }
-        describe "#decoded_attachment_content" do
-          subject { event_payload.decoded_attachment_content }
-          it { should eql("This is \na sample\ntext file\n") }
-        end
+        its(:name) { should eql('sample.txt') }
+        its(:type) { should eql('text/plain') }
+        its(:content) { should eql("This is \na sample\ntext file\n") }
+        its(:decoded_content) { should eql("This is \na sample\ntext file\n") }
+        its(:decoded_content) { should eql(payload_example('sample.txt')) }
       end
     end
 
@@ -197,12 +195,14 @@ describe Mandrill::WebHook::EventDecorator do
       its(:count) { should eql(1) }
       describe "attachment" do
         subject { event_payload.attachments.first }
-        it { subject['name'].should eql('sample.pdf') }
-        it { subject['type'].should eql('application/pdf') }
-        it { subject['content'].should match(/^JVBERi0xL/) }
-        describe "#decoded_attachment_content" do
-          subject { event_payload.decoded_attachment_content }
-          it { should match(/^%PDF-1.3/) }
+        its(:name) { should eql('sample.pdf') }
+        its(:type) { should eql('application/pdf') }
+        its(:content) { should match(/^JVBERi0xL/) }
+        its(:decoded_content) { should match(/^%PDF-1.3/) }
+        it "decoded_content should exactly match the original" do
+          original_digest = Digest::SHA1.hexdigest(payload_example('sample.pdf'))
+          decoded_digest = Digest::SHA1.hexdigest(subject.decoded_content)
+          original_digest.should eql(decoded_digest)
         end
       end
     end
@@ -212,23 +212,17 @@ describe Mandrill::WebHook::EventDecorator do
       its(:count) { should eql(2) }
       describe "pdf attachment" do
         subject { event_payload.attachments.first }
-        it { subject['name'].should eql('sample.pdf') }
-        it { subject['type'].should eql('application/pdf') }
-        it { subject['content'].should match(/^JVBERi0xL/) }
-        describe "#decoded_attachment_content" do
-          subject { event_payload.decoded_attachment_content(0) }
-          it { should match(/^%PDF-1.3/) }
-        end
+        its(:name) { should eql('sample.pdf') }
+        its(:type) { should eql('application/pdf') }
+        its(:content) { should match(/^JVBERi0xL/) }
+        its(:decoded_content) { should match(/^%PDF-1.3/) }
       end
       describe "txt attachment" do
         subject { event_payload.attachments.last }
-        it { subject['name'].should eql('sample.txt') }
-        it { subject['type'].should eql('text/plain') }
-        it { subject['content'].should eql("This is \na sample\ntext file\n") }
-        describe "#decoded_attachment_content" do
-          subject { event_payload.decoded_attachment_content(1) }
-          it { should eql("This is \na sample\ntext file\n") }
-        end
+        its(:name) { should eql('sample.txt') }
+        its(:type) { should eql('text/plain') }
+        its(:content) { should eql("This is \na sample\ntext file\n") }
+        its(:decoded_content) { should eql("This is \na sample\ntext file\n") }
       end
     end
 

@@ -17,6 +17,17 @@ module FixturesHelper
   def webhook_example_event(sample_name)
     webhook_example_events(sample_name).first
   end
+
+  def payload_examples_path
+    Pathname.new(File.dirname(__FILE__)).join('..','fixtures','payload_examples')
+  end
+
+  # Returns the content of +sample_name+ payload example filename
+  def payload_example(sample_name)
+    payload_examples_path.join(sample_name).read
+  end
+
+
 end
 
 

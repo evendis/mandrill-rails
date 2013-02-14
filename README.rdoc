@@ -185,6 +185,31 @@ In this case, I could extend EventDecorator in my app like this:
 
     end
 
+=== How do I extract attachments from an inbound email?
+
+The EventDecorator class provides an `attachments` method to access an array of attachments (if any).
+Each attachment is encapsulated in a class that describes the name, mime type, raw and decoded content.
+
+For example:
+
+    def handle_inbound(event_payload)
+      if attachments = event_payload.attachments.presence
+        # yes, we have at least 1 attachment. Lets look at the first:
+        a1 = attachments.first
+
+        a1.name
+        # => e.g. 'sample.pdf'
+        a1.type
+        # => e.g. 'application/pdf'
+        a1.content
+        # => this is the raw content provided by Mandrill, and will be base64-encoded if not plain text
+        # e.g. 'JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvY ... (etc)'
+        a1.decoded_content
+        # => this is the content decoded by Mandrill::Rails, ready to be written as a File or whatever
+        # e.g. '%PDF-1.3\n%\xC4\xE5 ... (etc)'
+
+      end
+    end
 
 === How do I use Mandrill gem features with Mandrill::Rails?
 
