@@ -14,7 +14,7 @@ FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the 
 * Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency
 
 Food for thought (upcoming features maybe)..
-* some generators may be handy to avoid the manual coding to hook up web hooks
+* some generators may be handy to avoid the manual coding to wire up web hooks
 * I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
 
 == The Mandrill::Rails Cookbook
@@ -35,7 +35,7 @@ Or install it yourself as:
 
 === How do I install it for gem development?
 
-If you want to work on enhancements of fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run <tt>bundle</tt> to install development dependencies.
+If you want to work on enhancements or fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run <tt>bundle</tt> to install development dependencies.
 
 Run tests using <tt>rake</tt> or <tt>rake spec</tt>, and note that guard is also included with the development dependencies so
 you can kick-off continuous testing of changed files by running <tt>bundle exec guard</tt>.
@@ -74,7 +74,7 @@ See {Mandrill WebHooks}[https://mandrillapp.com/settings/webhooks]
 * select the events you want to trigger on
 * set the "Post to URL" to point to your controller e.g. http://mydomain.com/inbox
 
-=== How do I handle a specific Mandrill event payload in my app?
+=== How do I handle specific Mandrill event payloads in my app?
 
 Once we have configured Mandrill and setup our routes and controllers, our app will successfully
 receive WebHook event notifications from Mandrill. But we are not doing anything with the payload yet.
@@ -87,7 +87,7 @@ click, spam, unsub, and reject.
 
 In our controller, we simply write a method called <tt>handle_<event-type></tt> and it will be called
 for each event payload received. The event payload will be passed to this method
-as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
+as a Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
 
 For example, to handle inbound email:
@@ -163,7 +163,7 @@ for full details)
 
 === How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
 
-It's quite likely you may benefit from adding more application-specific intelligence to the
+It's likely you may benefit from adding more application-specific intelligence to the
 <tt>event_payload</tt> object.
 
 There are many ways to do this, but it is quite legitimate to reopen the EventDecorator class and add your own methods
@@ -227,7 +227,7 @@ and its behaviour is unchanged. You can use all the features of the Mandrill gem
 * Start a feature/bugfix branch
 * Commit and push until you are happy with your contribution
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
+* Please try not to mess with the gemspec, Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
 == Copyright
 
