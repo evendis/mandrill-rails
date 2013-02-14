@@ -3,5 +3,5 @@ module Mandrill
   end
 end
 unless defined?(Mandrill::Rails::VERSION)
-  Mandrill::Rails::VERSION = "0.0.2"
+  Mandrill::Rails::VERSION = "0.0.3"
 end
