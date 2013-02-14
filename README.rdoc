@@ -37,6 +37,9 @@ Or install it yourself as:
 
 If you want to work on enhancements of fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run <tt>bundle</tt> to install development dependencies.
 
+Run tests using <tt>rake</tt> or <tt>rake spec</tt>, and note that guard is also included with the development dependencies so
+you can kick-off continuous testing of changed files by running <tt>bundle exec guard</tt>.
+
 See the section below on 'Contributing to Mandrill::Rails' for more information.
 
 === How do I configure my app for incoming Mandrill WebHooks?
@@ -82,7 +85,7 @@ we are interested in.
 The list of available event types includes: inbound, send, hard_bounce, soft_bounce, open,
 click, spam, unsub, and reject.
 
-In our controller, we simply write a method called `handle_<event-type>` and it will be called
+In our controller, we simply write a method called <tt>handle_<event-type></tt> and it will be called
 for each event payload received. The event payload will be passed to this method
 as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
@@ -109,7 +112,7 @@ And if you don't care to handle a specific payload type - then just don't implem
 
 === How do I pull apart the event_payload?
 
-The `event_payload` object passed to our handler represents a single event and is packaged
+The <tt>event_payload</tt> object passed to our handler represents a single event and is packaged
 as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
 
@@ -127,7 +130,7 @@ some are included in the project source under spec/fixtures/webhook_examples.
 
 === What additional methods does event_payload provide to help extract payload-specific elements?
 
-In addition to prividing full Hash-like access to the raw message, the `event_payload` object
+In addition to prividing full Hash-like access to the raw message, the <tt>event_payload</tt> object
 (a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
 things you might need to do with the payload. Here are some examples (see
 {Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator]
@@ -161,13 +164,13 @@ for full details)
 === How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
 
 It's quite likely you may benefit from adding more application-specific intelligence to the
-`event_payload` object.
+<tt>event_payload</tt> object.
 
 There are many ways to do this, but it is quite legitimate to reopen the EventDecorator class and add your own methods
 if you wish.
 
-For example `event_payload.user_email` returns the subject user email address, but perhaps I will commonly want to
-match that with a user record in my system. Or I similarly want to resolve `event_payload.recipient_emails` to user records.
+For example <tt>event_payload.user_email</tt> returns the subject user email address, but perhaps I will commonly want to
+match that with a user record in my system. Or I similarly want to resolve <tt>event_payload.recipient_emails</tt> to user records.
 In this case, I could extend EventDecorator in my app like this:
 
     # Extends Mandrill::WebHook::EventDecorator with app-specific event payload transformation
@@ -187,7 +190,7 @@ In this case, I could extend EventDecorator in my app like this:
 
 === How do I extract attachments from an inbound email?
 
-The EventDecorator class provides an `attachments` method to access an array of attachments (if any).
+The EventDecorator class provides an <tt>attachments</tt> method to access an array of attachments (if any).
 Each attachment is encapsulated in a class that describes the name, mime type, raw and decoded content.
 
 For example:
