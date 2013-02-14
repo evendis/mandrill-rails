@@ -1,0 +1,41 @@
+[
+  {
+    "event": "inbound",
+    "msg": {
+      "attachments": {
+        "sample.txt": {
+          "content": "This is \na sample\ntext file\n",
+          "name": "sample.txt",
+          "type": "text/plain"
+        }
+      },
+      "email": "inbox@example.com",
+      "from_email": "from@example.com",
+      "from_name": "Paul Gallagher",
+      "headers": {
+        "Content-Type": "multipart/mixed; boundary=e89a8f3ba2bfabfe6204d5a93196",
+        "Date": "Thu, 14 Feb 2013 14:16:06 +0800",
+        "Dkim-Signature": "v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmail.com; s=20120113; h=mime-version:x-received:date:message-id:subject:from:to :content-type; bh=9klOiPBS1fmHfWy4y/n63i9UkCsWeaWEoRK/Xoil3rc=; b=fd8OUm18616MYkDeCovUfcdp+/2eBDeO+BjmvuZp6DG0ltA6LdVOGi5QYzLlBH6h88 iQfCFc/6hXpI1gt62NPXetP6gjJwsYKzCUdsZ34OMmtDti0xD+Fs2Evs+LdRt+ubGWud elz56NANGT+kI3qw5TVtw4FZBiMEdH3m6cSgpUW4YmM0yRGXB8tLeeFhTNbnxeRx6U4P /psf+5I941CJrt7OtLLUwN4cVtUoflNnQcK+zXnOifmwHX8/TGsVcP2O8EQIdYS5eZnr U2tRJM3y7ADfUf81CkM2uwhaKt3cZJh3rdBUUv0TuHTob8FSUF0M9DV85YfKRgmdZSuY IR8w==",
+        "From": "Paul Gallagher <from@example.com>",
+        "Message-Id": "<CAGBx7Gg-CUco7NNsA79Ss1QMFTaXvyWnqkt26=RJr-ktSoRB0A@mail.gmail.com>",
+        "Mime-Version": "1.0",
+        "Received": [
+          "from mail-ia0-f180.google.com (mail-ia0-f180.google.com [209.85.210.180]) by ip-10-31-147-25 (Postfix) with ESMTPS id CA036151A005 for <inbox@example.com>; Thu, 14 Feb 2013 06:16:06 +0000 (UTC)",
+          "by mail-ia0-f180.google.com with SMTP id f27so2031783iae.11 for <inbox@example.com>; Wed, 13 Feb 2013 22:16:06 -0800 (PST)",
+          "by 10.64.28.212 with HTTP; Wed, 13 Feb 2013 22:16:06 -0800 (PST)"
+        ],
+        "Subject": "test 2 with attachment",
+        "To": "inbox@example.com",
+        "X-Received": "by 10.50.88.228 with SMTP id bj4mr16622425igb.85.1360822566387; Wed, 13 Feb 2013 22:16:06 -0800 (PST)"
+      },
+      "html": "<div dir=\"ltr\">this one has a text file attachment</div>\n\n",
+      "raw_msg": "Received: from mail-ia0-f180.google.com (mail-ia0-f180.google.com [209.85.210.180])\n\tby ip-10-31-147-25 (Postfix) with ESMTPS id CA036151A005\n\tfor <inbox@example.com>; Thu, 14 Feb 2013 06:16:06 +0000 (UTC)\nReceived: by mail-ia0-f180.google.com with SMTP id f27so2031783iae.11\n for <inbox@example.com>; Wed, 13 Feb 2013 22:16:06 -0800 (PST)\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\n d=gmail.com; s=20120113;\n h=mime-version:x-received:date:message-id:subject:from:to\n :content-type;\n bh=9klOiPBS1fmHfWy4y/n63i9UkCsWeaWEoRK/Xoil3rc=;\n b=fd8OUm18616MYkDeCovUfcdp+/2eBDeO+BjmvuZp6DG0ltA6LdVOGi5QYzLlBH6h88\n iQfCFc/6hXpI1gt62NPXetP6gjJwsYKzCUdsZ34OMmtDti0xD+Fs2Evs+LdRt+ubGWud\n elz56NANGT+kI3qw5TVtw4FZBiMEdH3m6cSgpUW4YmM0yRGXB8tLeeFhTNbnxeRx6U4P\n /psf+5I941CJrt7OtLLUwN4cVtUoflNnQcK+zXnOifmwHX8/TGsVcP2O8EQIdYS5eZnr\n U2tRJM3y7ADfUf81CkM2uwhaKt3cZJh3rdBUUv0TuHTob8FSUF0M9DV85YfKRgmdZSuY\n IR8w==\nMIME-Version: 1.0\nX-Received: by 10.50.88.228 with SMTP id bj4mr16622425igb.85.1360822566387;\n Wed, 13 Feb 2013 22:16:06 -0800 (PST)\nReceived: by 10.64.28.212 with HTTP; Wed, 13 Feb 2013 22:16:06 -0800 (PST)\nDate: Thu, 14 Feb 2013 14:16:06 +0800\nMessage-ID: <CAGBx7Gg-CUco7NNsA79Ss1QMFTaXvyWnqkt26=RJr-ktSoRB0A@mail.gmail.com>\nSubject: test 2 with attachment\nFrom: Paul Gallagher <from@example.com>\nTo: inbox@example.com\nContent-Type: multipart/mixed; boundary=e89a8f3ba2bfabfe6204d5a93196\n\n--e89a8f3ba2bfabfe6204d5a93196\nContent-Type: multipart/alternative; boundary=e89a8f3ba2bfabfe5b04d5a93194\n\n--e89a8f3ba2bfabfe5b04d5a93194\nContent-Type: text/plain; charset=UTF-8\n\nthis one has a text file attachment\n\n--e89a8f3ba2bfabfe5b04d5a93194\nContent-Type: text/html; charset=UTF-8\n\n<div dir=\"ltr\">this one has a text file attachment</div>\n\n--e89a8f3ba2bfabfe5b04d5a93194--\n--e89a8f3ba2bfabfe6204d5a93196\nContent-Type: text/plain; charset=US-ASCII; name=\"sample.txt\"\nContent-Disposition: attachment; filename=\"sample.txt\"\nContent-Transfer-Encoding: base64\nX-Attachment-Id: f_hd5im61u0\n\nVGhpcyBpcyAKYSBzYW1wbGUKdGV4dCBmaWxlCg==\n--e89a8f3ba2bfabfe6204d5a93196--",
+      "sender": null,
+      "subject": "test 2 with attachment",
+      "tags": [],
+      "text": "this one has a text file attachment\n\n",
+      "to": [ [ "inbox@example.com", null ] ]
+    },
+    "ts": 1360822567
+  }
+]

@@ -1,3 +1,5 @@
+require 'base64'
+
 # Wraps an individual Mandrill web hook event payload,
 # providing some convenience methods handling the payload.
 #
@@ -85,6 +87,29 @@ class Mandrill::WebHook::EventDecorator < Hash
   # Applicable events: inbound
   def recipient_emails
     recipients.map(&:first)
+  end
+
+  # Returns an array of all attachments
+  #   [ {..}, {..}, .. ]
+  # Each attachment is describe as a hash with three elements:
+  #   'name' => the filename
+  #   'type' => the content mime type
+  #   'content' => the raw content, which will be base64-encoded if not plain text
+  # Applicable events: inbound
+  def attachments
+    (msg['attachments']||{}).map(&:last)
+  end
+
+  # Returns the decoded content for attachment +index+ (0-based array index)
+  def decoded_attachment_content(index=0)
+    if attachment = (attachments[index]||{})
+      case attachment['type']
+      when 'text/plain'
+        attachment['content']
+      else # assume it is base64-encoded
+        Base64.decode64(attachment['content'])
+      end
+    end
   end
 
   # Returns the +format+ (:text,:html,:raw) message body.

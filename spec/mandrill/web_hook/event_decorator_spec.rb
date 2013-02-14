@@ -16,7 +16,7 @@ describe Mandrill::WebHook::EventDecorator do
   # * soft_bounce - message has soft bounced
   # * spam - recipient marked a message as spam
   # * unsub - recipient unsubscribed
-  #
+  # http://goingon.in/inbox
   {
     'inbound' => {
       :event_type => 'inbound',
@@ -171,6 +171,67 @@ describe Mandrill::WebHook::EventDecorator do
       let(:format) { :raw }
       it { should eql(expected) }
     end
+  end
+
+  describe "#attachments" do
+    let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+    subject { event_payload.attachments }
+
+    context "when single text attachment" do
+      let(:raw_event) { webhook_example_event('inbound_with_txt_attachment') }
+      its(:count) { should eql(1) }
+      describe "attachment" do
+        subject { event_payload.attachments.first }
+        it { subject['name'].should eql('sample.txt') }
+        it { subject['type'].should eql('text/plain') }
+        it { subject['content'].should eql("This is \na sample\ntext file\n") }
+        describe "#decoded_attachment_content" do
+          subject { event_payload.decoded_attachment_content }
+          it { should eql("This is \na sample\ntext file\n") }
+        end
+      end
+    end
+
+    context "when single pdf attachment" do
+      let(:raw_event) { webhook_example_event('inbound_with_pdf_attachment') }
+      its(:count) { should eql(1) }
+      describe "attachment" do
+        subject { event_payload.attachments.first }
+        it { subject['name'].should eql('sample.pdf') }
+        it { subject['type'].should eql('application/pdf') }
+        it { subject['content'].should match(/^JVBERi0xL/) }
+        describe "#decoded_attachment_content" do
+          subject { event_payload.decoded_attachment_content }
+          it { should match(/^%PDF-1.3/) }
+        end
+      end
+    end
+
+    context "when multiple attachments" do
+      let(:raw_event) { webhook_example_event('inbound_with_multiple_attachments') }
+      its(:count) { should eql(2) }
+      describe "pdf attachment" do
+        subject { event_payload.attachments.first }
+        it { subject['name'].should eql('sample.pdf') }
+        it { subject['type'].should eql('application/pdf') }
+        it { subject['content'].should match(/^JVBERi0xL/) }
+        describe "#decoded_attachment_content" do
+          subject { event_payload.decoded_attachment_content(0) }
+          it { should match(/^%PDF-1.3/) }
+        end
+      end
+      describe "txt attachment" do
+        subject { event_payload.attachments.last }
+        it { subject['name'].should eql('sample.txt') }
+        it { subject['type'].should eql('text/plain') }
+        it { subject['content'].should eql("This is \na sample\ntext file\n") }
+        describe "#decoded_attachment_content" do
+          subject { event_payload.decoded_attachment_content(1) }
+          it { should eql("This is \na sample\ntext file\n") }
+        end
+      end
+    end
+
   end
 
 
