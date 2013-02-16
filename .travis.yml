@@ -5,7 +5,7 @@ rvm:
   - 1.8.7
   - 1.9.2
   - 1.9.3
-  - rbx-18mode
+  # - rbx-18mode # removing for now; travis is having chronic intermittent issues building this properly at the moment
   - rbx-19mode
   - jruby-18mode
   - jruby-19mode

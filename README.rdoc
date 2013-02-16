@@ -9,9 +9,10 @@ FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the 
 
 == Requirements and Known Limitations
 
-* Tested with MRI 1.8.7, 1.9.2, 1.9.3, Rubinius (1.8 and 1.9 mode), JRuby (1.8 and 1.9 mode)
-* Requires Rails >= 3.0.3 (including 3.1 and 3.2)
-* Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency
+* Tested with MRI 1.8.7, 1.9.2, 1.9.3, Rubinius (1.9 mode), JRuby (1.8 and 1.9 mode).
+* Rubinius 1.8 mode build temporarily removed since travis is having intermittent problems with this config.
+* Requires Rails >= 3.0.3 (including 3.1 and 3.2).
+* Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency.
 
 Food for thought (upcoming features maybe)..
 * some generators may be handy to avoid the manual coding to wire up web hooks
