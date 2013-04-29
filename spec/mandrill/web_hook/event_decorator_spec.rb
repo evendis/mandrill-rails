@@ -211,14 +211,14 @@ describe Mandrill::WebHook::EventDecorator do
       let(:raw_event) { webhook_example_event('inbound_with_multiple_attachments') }
       its(:count) { should eql(2) }
       describe "pdf attachment" do
-        subject { event_payload.attachments.first }
+        subject { event_payload.attachments.select{|a| a.type =~ /pdf/ }.first }
         its(:name) { should eql('sample.pdf') }
         its(:type) { should eql('application/pdf') }
         its(:content) { should match(/^JVBERi0xL/) }
         its(:decoded_content) { should match(/^%PDF-1.3/) }
       end
       describe "txt attachment" do
-        subject { event_payload.attachments.last }
+        subject { event_payload.attachments.select{|a| a.type =~ /plain/ }.first }
         its(:name) { should eql('sample.txt') }
         its(:type) { should eql('text/plain') }
         its(:content) { should eql("This is \na sample\ntext file\n") }
