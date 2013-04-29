@@ -1,0 +1,3 @@
+0.0.4
+===================================================================
+* removed manadrill gem as a dependency (thanks to @ssaunier for highlighting this)
