@@ -1,9 +1,11 @@
 = Mandrill::Rails {<img src="https://secure.travis-ci.org/evendis/mandrill-rails.png" />}[http://travis-ci.org/evendis/mandrill-rails]
 
-Mandrill::Rails extends the capabilities of the
-{Mandrill}[https://github.com/tatemae-consultancy/mandrill] gem to provide tighter integration for Rails projects.
-
 The primary goal of Mandrill::Rails is to make supporting Mandrill web hooks as easy and Rails-native as possible. As other opportunities for better Rails integration of the Mandrill API are discovered, these may be rolled in too.
+
+Mandrill::Rails currently does not need or require any direct Mandrill API integration (such as provided by
+various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
+and {MailChimp}[https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp] gems).
+If you need direct API integration in addition to Mandrill::Rails features, you can choose to add whichever best meets your needs.
 
 FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the same folks who do MailChimp.
 
@@ -12,7 +14,6 @@ FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the 
 * Tested with MRI 1.8.7, 1.9.2, 1.9.3, Rubinius (1.9 mode), JRuby (1.8 and 1.9 mode).
 * Rubinius 1.8 mode build temporarily removed since travis is having intermittent problems with this config.
 * Requires Rails >= 3.0.3 (including 3.1 and 3.2).
-* Includes {Mandrill}[https://github.com/tatemae-consultancy/mandrill] ~> 0.0.2 as a dependency.
 
 Food for thought (upcoming features maybe)..
 * some generators may be handy to avoid the manual coding to wire up web hooks
@@ -215,10 +216,13 @@ For example:
       end
     end
 
-=== How do I use Mandrill gem features with Mandrill::Rails?
+=== How do I use Mandrill API features with Mandrill::Rails?
 
-{Mandrill}[https://github.com/tatemae-consultancy/mandrill] is included with Mandrill::Rails
-and its behaviour is unchanged. You can use all the features of the Mandrill gem as normal.
+Mandrill::Rails currently does not need or require any direct Mandrill API integration (such as provided by
+various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
+and {MailChimp}[https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp] gems).
+If you need direct API integration in addition to Mandrill::Rails features,
+you can choose to add whichever best meets your needs and use as normal.
 
 == Contributing to Mandrill::Rails
 
