@@ -2,10 +2,12 @@
 # see http://travis-ci.org/evendis/mandrill-rails
 language: ruby
 rvm:
-  - 1.8.7
-  - 1.9.2
+  # removing 1.8 and 1.9.2 tests because we don't really care anymore and activesupport 4 won't like them
+  #- 1.8.7
+  #- 1.9.2
+  #- jruby-18mode
   - 1.9.3
+  - 2.0.0
   # - rbx-18mode # removing for now; travis is having chronic intermittent issues building this properly at the moment
   - rbx-19mode
-  - jruby-18mode
   - jruby-19mode
