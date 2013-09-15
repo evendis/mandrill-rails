@@ -37,35 +37,44 @@ module Mandrill::Rails::WebHookProcessor
     skip_before_filter :verify_authenticity_token
   end
 
-  # Returns 200 and does nothing else (this is a test done by the mandrill service)
+  module ClassMethods
+    # Returns the current WebHook key(s) as an Array if called with no parameters.
+    # If called with parameters, add the params to the WebHook key array.
+    # If called with nil as the parameters, clears the WebHook key array.
+    def mandrill_webhook_keys(*keys)
+      @mandrill_webhook_keys ||= []
+      if keys.present?
+        if keys.compact.present?
+          @mandrill_webhook_keys.concat(keys.flatten)
+        else
+          @mandrill_webhook_keys = []
+        end
+      end
+      @mandrill_webhook_keys
+    end
+
+    # Command: directly assigns the WebHook key array to +keys+
+    def mandrill_webhook_keys=(keys)
+      @mandrill_webhook_keys = Array(keys)
+    end
+
+  end
+
+  # Handles controller :show action (corresponds to a Mandrill "are you there?" test ping).
+  # Returns 200 and does nothing else.
   def show
     head(:ok)
   end
 
+  # Handles controller :create action (corresponds to a POST from Mandrill).
   def create
-    if processor = Mandrill::WebHook::Processor.new(params)
-      processor.callback_host = self
+    processor = Mandrill::WebHook::Processor.new(params,self)
+    if processor.authentic?(request)
       processor.run!
-    end
-    head(:ok)
-  end
-
-  def authenticate_mandrill!(secret_key)
-    unless generate_signature(secret_key, request.original_url, request.params) == request.headers['HTTP_X_MANDRILL_SIGNATURE']
+      head(:ok)
+    else
       head :forbidden, :text => "Mandrill signature did not match."
     end
   end
-  
-  private
-    
-    # Method described in docs: http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests
-    def generate_signature(webhook_key, url, params)
-      signed_data = url
-      params.except(:action, :controller).keys.sort.each do |key|
-        signed_data << key
-        signed_data << params[key]
-      end
-      Base64.encode64("#{OpenSSL::HMAC.digest('sha1', webhook_key, signed_data)}").strip
-    end
 
 end

@@ -226,9 +226,44 @@ you can choose to add whichever best meets your needs and use as normal.
 
 === How can I authenticate Mandrill Webhooks?
 
-Add a before_filter to your controller with your secret key (YOUR_MANDRILL_WEBHOOK_KEY), like this:
+Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You con find and reset your API keys on the
+{Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
 
-    before_filter {|c| c.authenticate_mandrill!('YOUR_MANDRILL_WEBHOOK_KEY') }
+If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
+
+To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you configure
+your API keys as environment settings, or use some other means to avoid committing the API keys to your source code.
+
+For example, to handle inbound email:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      mandrill_webhook_keys 'YOUR_MANDRILL_WEBHOOK_KEY'
+
+      def handle_inbound(event_payload)
+        # .. handler methods will only be called if authentication has succeeded.
+      end
+
+    end
+
+=== How can I authenticate multiple Mandrill Webhooks in the same controller?
+
+Sometimes you may have more than one WebHook sending requests to a single controller, for example if you have one handling 'click' events, and another sending inbound email. Mandrill assigns separate API keys to each of these.
+
+In this case, just add all the valid API keys you will allow with <tt>mandrill_webhook_keys</tt>, for example:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      mandrill_webhook_keys 'MANDRILL_CLICK_WEBHOOK_KEY', 'MANDRILL_INBOUND_WEBHOOK_KEY', 'ANOTHER_WEBHOOK_KEY'
+
+      def handle_inbound(event_payload)
+      end
+
+      def handle_click(event_payload)
+      end
+
+    end
+
 
 == Contributing to Mandrill::Rails
 

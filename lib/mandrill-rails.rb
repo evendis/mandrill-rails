@@ -1,7 +1,6 @@
 require 'json'
 require 'openssl'
-require 'active_support/concern'
-require 'active_support/dependencies'
+require 'active_support/core_ext'
 
 require "mandrill-rails/version"
 require 'mandrill/web_hook'
