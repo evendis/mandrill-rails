@@ -1,4 +1,5 @@
 require 'json'
+require 'openssl'
 require 'active_support/concern'
 require 'active_support/dependencies'
 

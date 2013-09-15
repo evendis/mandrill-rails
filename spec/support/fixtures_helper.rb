@@ -15,7 +15,11 @@ module FixturesHelper
 
   # Returns the JSON representation of an +sample_name+ event
   def webhook_example_event(sample_name)
-    webhook_example_events(sample_name).first
+    data = webhook_example_events(sample_name).first
+    if data['raw_params'] && (mandrill_events_data = data['raw_params']['mandrill_events'])
+      data['raw_params']['mandrill_events'] = URI.decode_www_form_component(mandrill_events_data)
+    end
+    data
   end
 
   def payload_examples_path

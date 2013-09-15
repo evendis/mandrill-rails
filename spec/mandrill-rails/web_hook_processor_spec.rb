@@ -30,4 +30,14 @@ describe Mandrill::Rails::WebHookProcessor do
     end
   end
 
+  describe "#generate_signature (private)" do
+    let(:example_payload) { webhook_example_event('click_with_signature') }
+    let(:expected_signature) { example_payload['headers']['X-Mandrill-Signature'] }
+    let(:original_url) { example_payload['original_url'] }
+    let(:webhook_key) { example_payload['private_key'] }
+    let(:params) { example_payload['raw_params'] }
+    subject { processor_instance.send(:generate_signature, webhook_key, original_url, params)}
+    it { should eql(expected_signature) }
+  end
+
 end
