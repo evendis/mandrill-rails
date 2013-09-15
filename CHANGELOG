@@ -1,3 +1,5 @@
-0.0.4
-===================================================================
+== 0.0.5
+* added support for Mandrill webhook authentication (thanks to @zshannon for the contribution)
+
+== 0.0.4
 * removed manadrill gem as a dependency (thanks to @ssaunier for highlighting this)
