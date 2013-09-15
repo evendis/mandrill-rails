@@ -112,6 +112,46 @@ your handler individually.
 
 And if you don't care to handle a specific payload type - then just don't implement the associated handler.
 
+=== How can I authenticate Mandrill Webhooks?
+
+Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You con find and reset your API keys on the
+{Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
+
+If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
+
+To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you configure
+your API keys as environment settings, or use some other means to avoid committing the API keys to your source code.
+
+For example, to handle inbound email:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      mandrill_webhook_keys 'YOUR_MANDRILL_WEBHOOK_KEY'
+
+      def handle_inbound(event_payload)
+        # .. handler methods will only be called if authentication has succeeded.
+      end
+
+    end
+
+=== How can I authenticate multiple Mandrill Webhooks in the same controller?
+
+Sometimes you may have more than one WebHook sending requests to a single controller, for example if you have one handling 'click' events, and another sending inbound email. Mandrill assigns separate API keys to each of these.
+
+In this case, just add all the valid API keys you will allow with <tt>mandrill_webhook_keys</tt>, for example:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      mandrill_webhook_keys 'MANDRILL_CLICK_WEBHOOK_KEY', 'MANDRILL_INBOUND_WEBHOOK_KEY', 'ANOTHER_WEBHOOK_KEY'
+
+      def handle_inbound(event_payload)
+      end
+
+      def handle_click(event_payload)
+      end
+
+    end
+
 === How do I pull apart the event_payload?
 
 The <tt>event_payload</tt> object passed to our handler represents a single event and is packaged
@@ -223,46 +263,6 @@ various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
 and {MailChimp}[https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp] gems).
 If you need direct API integration in addition to Mandrill::Rails features,
 you can choose to add whichever best meets your needs and use as normal.
-
-=== How can I authenticate Mandrill Webhooks?
-
-Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You con find and reset your API keys on the
-{Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
-
-If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
-
-To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you configure
-your API keys as environment settings, or use some other means to avoid committing the API keys to your source code.
-
-For example, to handle inbound email:
-
-    class InboxController < ApplicationController
-      include Mandrill::Rails::WebHookProcessor
-      mandrill_webhook_keys 'YOUR_MANDRILL_WEBHOOK_KEY'
-
-      def handle_inbound(event_payload)
-        # .. handler methods will only be called if authentication has succeeded.
-      end
-
-    end
-
-=== How can I authenticate multiple Mandrill Webhooks in the same controller?
-
-Sometimes you may have more than one WebHook sending requests to a single controller, for example if you have one handling 'click' events, and another sending inbound email. Mandrill assigns separate API keys to each of these.
-
-In this case, just add all the valid API keys you will allow with <tt>mandrill_webhook_keys</tt>, for example:
-
-    class InboxController < ApplicationController
-      include Mandrill::Rails::WebHookProcessor
-      mandrill_webhook_keys 'MANDRILL_CLICK_WEBHOOK_KEY', 'MANDRILL_INBOUND_WEBHOOK_KEY', 'ANOTHER_WEBHOOK_KEY'
-
-      def handle_inbound(event_payload)
-      end
-
-      def handle_click(event_payload)
-      end
-
-    end
 
 
 == Contributing to Mandrill::Rails
