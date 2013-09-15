@@ -228,7 +228,7 @@ you can choose to add whichever best meets your needs and use as normal.
 
 Add a before_filter to your controller with your secret key (YOUR_MANDRILL_WEBHOOK_KEY), like this:
 
-	before_filter {|c| c.authenticate_mandrill!('YOUR_MANDRILL_WEBHOOK_KEY') }
+    before_filter {|c| c.authenticate_mandrill!('YOUR_MANDRILL_WEBHOOK_KEY') }
 
 == Contributing to Mandrill::Rails
 
