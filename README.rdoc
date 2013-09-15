@@ -114,13 +114,13 @@ And if you don't care to handle a specific payload type - then just don't implem
 
 === How can I authenticate Mandrill Webhooks?
 
-Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You con find and reset your API keys on the
+Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You can lookup and reset your API keys on the
 {Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
 
 If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
 
-To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you configure
-your API keys as environment settings, or use some other means to avoid committing the API keys to your source code.
+To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you pull
+your API keys from environment settings, or use some other means to avoid committing the API keys in your source code.
 
 For example, to handle inbound email:
 
