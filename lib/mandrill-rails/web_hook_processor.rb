@@ -50,5 +50,22 @@ module Mandrill::Rails::WebHookProcessor
     head(:ok)
   end
 
+  def authenticate_mandrill!(secret_key)
+    unless generate_signature(secret_key, request.original_url, request.params) == request.headers['HTTP_X_MANDRILL_SIGNATURE']
+      head :forbidden, :text => "Mandrill signature did not match."
+    end
+  end
+  
+  private
+    
+    # Method described in docs: http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests
+    def generate_signature(webhook_key, url, params)
+      signed_data = url
+      params.except(:action, :controller).keys.sort.each do |key|
+        signed_data << key
+        signed_data << params[key]
+      end
+      Base64.encode64("#{OpenSSL::HMAC.digest('sha1', webhook_key, signed_data)}").strip
+    end
 
 end
