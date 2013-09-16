@@ -68,13 +68,18 @@ module Mandrill::Rails::WebHookProcessor
 
   # Handles controller :create action (corresponds to a POST from Mandrill).
   def create
-    processor = Mandrill::WebHook::Processor.new(params,self)
-    if processor.authentic?(request)
-      processor.run!
-      head(:ok)
-    else
-      head :forbidden, :text => "Mandrill signature did not match."
-    end
+    processor = Mandrill::WebHook::Processor.new(params, self)
+    processor.run!
+    head(:ok)
+  end
+
+  def authenticate_mandrill_request!
+  	unless request.head?
+  	  unless Mandrill::WebHook::Processor.new(params, self).authentic?(request)
+  	    head(:forbidden, :text => "Mandrill signature did not match.")
+  	    return false
+  	  end
+  	end
   end
 
 end
