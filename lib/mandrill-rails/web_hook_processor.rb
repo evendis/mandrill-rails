@@ -74,7 +74,7 @@ module Mandrill::Rails::WebHookProcessor
   end
 
   def authenticate_mandrill_request!
-  	unless request.head?
+  	if request.post?
   	  unless Mandrill::WebHook::Processor.new(params, self).authentic?(request)
   	    head(:forbidden, :text => "Mandrill signature did not match.")
   	    return false
