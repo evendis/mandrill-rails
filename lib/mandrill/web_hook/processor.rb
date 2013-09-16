@@ -40,7 +40,7 @@ class Mandrill::WebHook::Processor
   def authentic?(request)
     result = true
     if callback_host && (keys = callback_host.class.mandrill_webhook_keys).present?
-      expected_signature = callback_host.request.headers['HTTP_X_MANDRILL_SIGNATURE']
+      expected_signature = request.headers['HTTP_X_MANDRILL_SIGNATURE']
       keys.each do |key|
         signature = generate_signature(key, request.original_url, request.params)
         result = (signature == expected_signature)
