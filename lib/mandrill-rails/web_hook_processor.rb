@@ -35,6 +35,7 @@ module Mandrill::Rails::WebHookProcessor
 
   included do
     skip_before_filter :verify_authenticity_token
+    before_filter :authenticate_mandrill_request!, :only => [:create]
   end
 
   module ClassMethods
@@ -74,12 +75,14 @@ module Mandrill::Rails::WebHookProcessor
   end
 
   def authenticate_mandrill_request!
-  	if request.post?
-  	  unless Mandrill::WebHook::Processor.new(params, self).authentic?(request)
-  	    head(:forbidden, :text => "Mandrill signature did not match.")
-  	    return false
-  	  end
-  	end
+    expected_signature = request.headers['HTTP_X_MANDRILL_SIGNATURE']
+    mandrill_webhook_keys = self.class.mandrill_webhook_keys
+    if Mandrill::WebHook::Processor.authentic?(expected_signature,mandrill_webhook_keys,request.original_url,request.params)
+      true
+    else
+      head(:forbidden, :text => "Mandrill signature did not match.")
+      false
+    end
   end
 
 end

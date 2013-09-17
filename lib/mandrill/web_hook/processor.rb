@@ -36,28 +36,29 @@ class Mandrill::WebHook::Processor
     Mandrill::WebHook::EventDecorator[raw_event_payload]
   end
 
-  # Returns true if +request+ does not require authentication, or when authentication is valid.
-  def authentic?(request)
-    result = true
-    if callback_host && (keys = callback_host.class.mandrill_webhook_keys).present?
-      expected_signature = request.headers['HTTP_X_MANDRILL_SIGNATURE']
-      keys.each do |key|
-        signature = generate_signature(key, request.original_url, request.params)
+  class << self
+
+    # Returns true if +params+ sent to +original_url+ are authentic given +expected_signature+ and +mandrill_webhook_keys+.
+    def authentic?(expected_signature, mandrill_webhook_keys, original_url, params)
+      result = true
+      Array(mandrill_webhook_keys).each do |key|
+        signature = generate_signature(key, original_url, params)
         result = (signature == expected_signature)
         break if result
       end
+      result
     end
-    result
-  end
 
-  # Method described in docs: http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests
-  def generate_signature(webhook_key, original_url, params)
-    signed_data = original_url.dup
-    params.except(:action, :controller).keys.sort.each do |key|
-      signed_data << key
-      signed_data << params[key]
+    # Method described in docs: http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests
+    def generate_signature(webhook_key, original_url, params)
+      signed_data = original_url.dup
+      params.except(:action, :controller).keys.sort.each do |key|
+        signed_data << key
+        signed_data << params[key]
+      end
+      Base64.encode64("#{OpenSSL::HMAC.digest('sha1', webhook_key, signed_data)}").strip
     end
-    Base64.encode64("#{OpenSSL::HMAC.digest('sha1', webhook_key, signed_data)}").strip
+
   end
 
 end
