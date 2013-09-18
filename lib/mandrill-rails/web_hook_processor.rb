@@ -39,10 +39,11 @@ module Mandrill::Rails::WebHookProcessor
   end
 
   module ClassMethods
+    # Gets/sets the current Mandrill WebHook Authentication key(s).
     # Returns the current WebHook key(s) as an Array if called with no parameters.
     # If called with parameters, add the params to the WebHook key array.
     # If called with nil as the parameters, clears the WebHook key array.
-    def mandrill_webhook_keys(*keys)
+    def authenticate_with_mandrill_keys!(*keys)
       @mandrill_webhook_keys ||= []
       if keys.present?
         if keys.compact.present?
@@ -54,7 +55,12 @@ module Mandrill::Rails::WebHookProcessor
       @mandrill_webhook_keys
     end
 
-    # Command: directly assigns the WebHook key array to +keys+
+    # Gets the current Mandrill WebHook Authentication key(s).
+    def mandrill_webhook_keys
+      authenticate_with_mandrill_keys!
+    end
+
+    # Command: directly assigns the WebHook key array to +keys+.
     def mandrill_webhook_keys=(keys)
       @mandrill_webhook_keys = Array(keys)
     end

@@ -119,14 +119,14 @@ Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/
 
 If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
 
-To enable authentication, use the <tt>mandrill_webhook_keys</tt> method to set your API key. It is recommended you pull
+To enable authentication, use the <tt>authenticate_with_mandrill_keys!</tt> method to set your API key. It is recommended you pull
 your API keys from environment settings, or use some other means to avoid committing the API keys in your source code.
 
 For example, to handle inbound email:
 
     class InboxController < ApplicationController
       include Mandrill::Rails::WebHookProcessor
-      mandrill_webhook_keys 'YOUR_MANDRILL_WEBHOOK_KEY'
+      authenticate_with_mandrill_keys! 'YOUR_MANDRILL_WEBHOOK_KEY'
 
       def handle_inbound(event_payload)
         # .. handler methods will only be called if authentication has succeeded.
@@ -138,11 +138,11 @@ For example, to handle inbound email:
 
 Sometimes you may have more than one WebHook sending requests to a single controller, for example if you have one handling 'click' events, and another sending inbound email. Mandrill assigns separate API keys to each of these.
 
-In this case, just add all the valid API keys you will allow with <tt>mandrill_webhook_keys</tt>, for example:
+In this case, just add all the valid API keys you will allow with <tt>authenticate_with_mandrill_keys!</tt>, for example:
 
     class InboxController < ApplicationController
       include Mandrill::Rails::WebHookProcessor
-      mandrill_webhook_keys 'MANDRILL_CLICK_WEBHOOK_KEY', 'MANDRILL_INBOUND_WEBHOOK_KEY', 'ANOTHER_WEBHOOK_KEY'
+      authenticate_with_mandrill_keys! 'MANDRILL_CLICK_WEBHOOK_KEY', 'MANDRILL_INBOUND_WEBHOOK_KEY', 'ANOTHER_WEBHOOK_KEY'
 
       def handle_inbound(event_payload)
       end

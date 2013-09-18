@@ -17,7 +17,7 @@ describe Mandrill::Rails::WebHookProcessor do
   let(:processor_class) { WebHookProcessorTestHarness }
   let(:processor_instance) { processor_class.new }
   before do
-    processor_class.mandrill_webhook_keys nil
+    processor_class.authenticate_with_mandrill_keys! nil
   end
 
   describe "##skip_before_filter settings" do
@@ -30,29 +30,44 @@ describe Mandrill::Rails::WebHookProcessor do
     it { should eql([:authenticate_mandrill_request!, {:only=>[:create]}]) }
   end
 
-  describe "##mandrill_webhook_keys" do
+  describe "##authenticate_with_mandrill_keys!" do
     subject { processor_class.mandrill_webhook_keys }
     it { should eql([]) }
     context "when set with a single value" do
       let(:key_a) { "key_a" }
-      before { processor_class.mandrill_webhook_keys key_a }
+      before { processor_class.authenticate_with_mandrill_keys! key_a }
       it { should eql([key_a]) }
       context "then called with nil" do
-        before { processor_class.mandrill_webhook_keys nil }
+        before { processor_class.authenticate_with_mandrill_keys! nil }
         it { should eql([]) }
       end
     end
     context "when set with a list of values" do
       let(:key_a) { "key_a" }
       let(:key_b) { "key_b" }
-      before { processor_class.mandrill_webhook_keys key_a, key_b }
+      before { processor_class.authenticate_with_mandrill_keys! key_a, key_b }
       it { should eql([key_a,key_b]) }
     end
     context "when set with an explicit array of values" do
       let(:key_a) { "key_a" }
       let(:key_b) { "key_b" }
-      before { processor_class.mandrill_webhook_keys [key_a, key_b] }
+      before { processor_class.authenticate_with_mandrill_keys! [key_a, key_b] }
       it { should eql([key_a,key_b]) }
+    end
+  end
+
+  describe "#mandrill_webhook_keys" do
+    subject { processor_class.mandrill_webhook_keys }
+    it { should eql([]) }
+    context "when set with mandrill_webhook_keys=" do
+      let(:expected_value) { [1,2,3] }
+      before { processor_class.mandrill_webhook_keys = expected_value }
+      it { should eql(expected_value) }
+    end
+    context "when set with authenticate_with_mandrill_keys!" do
+      let(:expected_value) { [4,5,6] }
+      before { processor_class.authenticate_with_mandrill_keys! expected_value }
+      it { should eql(expected_value) }
     end
   end
 
@@ -101,7 +116,7 @@ describe Mandrill::Rails::WebHookProcessor do
     end
     context "when authentication enabled" do
       before do
-        processor_class.mandrill_webhook_keys mandrill_webhook_keys
+        processor_class.authenticate_with_mandrill_keys! mandrill_webhook_keys
       end
       context "with valid key" do
         let(:mandrill_webhook_keys) { valid_webhook_key }
