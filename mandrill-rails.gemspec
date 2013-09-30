@@ -7,6 +7,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Rails integration for Mandrill}
   gem.summary       = %q{Provides webhook processing and event decoration to make using Mandrill with Rails just that much easier}
   gem.homepage      = "https://github.com/evendis/mandrill-rails"
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
