@@ -9,5 +9,5 @@ rvm:
   - 1.9.3
   - 2.0.0
   # - rbx-18mode # removing for now; travis is having chronic intermittent issues building this properly at the moment
-  - rbx-19mode
+  # - rbx-19mode # removeing for now; again, borked on travis "rbx-2.2.1-d19 is not installed"
   - jruby-19mode
