@@ -181,6 +181,30 @@ describe Mandrill::WebHook::EventDecorator do
       its(:message_id) { should be_nil }
       its(:sender_email) { should be_nil }
     end
+
+    context "with html-only payload; see github issue \#8" do
+      let(:raw_event) { webhook_example_event('inbound_html_only') }
+      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+
+      subject { event_payload }
+      its(:message_body) { should_not be_nil }
+      it { subject.message_body(:html).should_not be_nil }
+      it { subject.message_body(:text).should be_nil }
+      its(:message_id) { should eql('<OFA804C4DE.C8619FB4-ON80257C30.004A7A89-80257C30.004A7A94@xxxxx.co.uk>') }
+      its(:sender_email) { should eql('Leeroy.xxxx@xxxx.co.uk') }
+    end
+
+    context "with text-only payload" do
+      let(:raw_event) { webhook_example_event('inbound_text_only') }
+      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+
+      subject { event_payload }
+      its(:message_body) { should_not be_nil }
+      it { subject.message_body(:html).should be_nil }
+      it { subject.message_body(:text).should_not be_nil }
+      its(:message_id) { should eql('<CAGBx7Gg-CUco7NNsA79Ss1QMFTaXvyWnqkt26=RJr-ktSoRB0A@mail.gmail.com>') }
+      its(:sender_email) { should eql('from@example.com') }
+    end
   end
 
   describe "#attachments" do

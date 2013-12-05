@@ -98,8 +98,9 @@ class Mandrill::WebHook::EventDecorator < Hash
   end
 
   # Returns the +format+ (:text,:html,:raw) message body.
+  # If +format+ is not specified, it will return the first available message content in order: text, html, raw.
   # Applicable events: inbound
-  def message_body(format=:text)
+  def message_body(format=nil)
     case format
     when :text
       msg['text']
@@ -107,6 +108,8 @@ class Mandrill::WebHook::EventDecorator < Hash
       msg['html']
     when :raw
       msg['raw_msg']
+    else
+      msg['text'] || msg['html'] || msg['raw_msg']
     end
   end
 
