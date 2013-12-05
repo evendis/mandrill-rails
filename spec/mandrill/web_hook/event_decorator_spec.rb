@@ -171,6 +171,16 @@ describe Mandrill::WebHook::EventDecorator do
       let(:format) { :raw }
       it { should eql(expected) }
     end
+
+    context "when msg is missing" do
+      let(:raw_event) { webhook_example_event('inbound_without_msg') }
+      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+
+      subject { event_payload }
+      its(:message_body) { should be_nil }
+      its(:message_id) { should be_nil }
+      its(:sender_email) { should be_nil }
+    end
   end
 
   describe "#attachments" do
