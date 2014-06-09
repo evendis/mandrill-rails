@@ -52,7 +52,7 @@ class Mandrill::WebHook::Processor
     # Method described in docs: http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests
     def generate_signature(webhook_key, original_url, params)
       signed_data = original_url.dup
-      params.except(:action, :controller).keys.sort.each do |key|
+      params.keys.sort.each do |key|
         signed_data << key
         signed_data << params[key]
       end

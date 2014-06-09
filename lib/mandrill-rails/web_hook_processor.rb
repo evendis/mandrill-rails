@@ -83,7 +83,7 @@ module Mandrill::Rails::WebHookProcessor
   def authenticate_mandrill_request!
     expected_signature = request.headers['HTTP_X_MANDRILL_SIGNATURE']
     mandrill_webhook_keys = self.class.mandrill_webhook_keys
-    if Mandrill::WebHook::Processor.authentic?(expected_signature,mandrill_webhook_keys,request.original_url,request.params)
+    if Mandrill::WebHook::Processor.authentic?(expected_signature,mandrill_webhook_keys,request.original_url,request.request_parameters)
       true
     else
       head(:forbidden, :text => "Mandrill signature did not match.")
