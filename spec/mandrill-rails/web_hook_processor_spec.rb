@@ -104,7 +104,7 @@ describe Mandrill::Rails::WebHookProcessor do
     let(:request) { double() }
     before do
       request.stub(:original_url).and_return(original_url)
-      request.stub(:params).and_return(raw_params)
+      request.stub(:request_parameters).and_return(raw_params)
       request.stub(:headers).and_return(headers)
       processor_instance.request = request
       processor_instance.params = params
