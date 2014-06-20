@@ -1,9 +1,1 @@
-== 1.0.1
-* When specific format not requested, EventDecorator#message_body returns the first available body content. See \#8
-
-== 1.0.0
-* added support for Mandrill webhook authentication (thanks to @zshannon for the contribution)
-* stepped to 1.0.0 (applying Semantic Versioning principles; see http://semver.org/)
-
-== 0.0.4
-* removed manadrill gem as a dependency (thanks to @ssaunier for highlighting this)
+See release notes at https://github.com/evendis/mandrill-rails/releases
