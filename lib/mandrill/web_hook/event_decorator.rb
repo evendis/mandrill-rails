@@ -42,6 +42,11 @@ class Mandrill::WebHook::EventDecorator < Hash
     msg['_version']
   end
 
+  # Returns, if pre-configured, the metadata.
+  def metadata
+    msg['metadata']||{}
+  end
+
   # Returns the reply-to ID.
   # Applicable events: inbound
   def in_reply_to
