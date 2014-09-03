@@ -34,6 +34,16 @@ describe Mandrill::WebHook::Processor do
         processor.run!
       end
     end
+    context "without handler method" do
+      let(:event1) { { "event" => "inbound" } }
+      let(:event2) { { "event" => "inbound" } }
+      let(:params) { { "mandrill_events" => [event1,event2].to_json } }
+
+      it "raises error on run!" do
+        expect { processor.run! }
+        .to raise_error(Mandrill::Rails::Errors::MissingEventHandler)
+      end
+    end
   end
 
   describe "#wrap_payload" do
