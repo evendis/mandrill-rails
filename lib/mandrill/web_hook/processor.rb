@@ -21,7 +21,7 @@ class Mandrill::WebHook::Processor
     mandrill_events.each do |raw_payload|
       event_payload = wrap_payload(raw_payload)
       handler = "handle_#{event_payload.event_type}".to_sym
-      if callback_host && callback_host.respond_to?(handler)
+      if callback_host && callback_host.respond_to?(handler, true)
         callback_host.send(handler,event_payload)
       elsif self.respond_to?(handler)
         self.send(handler,event_payload)
