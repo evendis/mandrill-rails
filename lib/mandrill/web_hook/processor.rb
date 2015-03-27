@@ -26,7 +26,8 @@ class Mandrill::WebHook::Processor
       elsif self.respond_to?(handler)
         self.send(handler,event_payload)
       else
-        # TODO raise an error
+        raise Mandrill::Rails::Errors::MissingEventHandler,
+          "Expected handler method `#{handler}` for event type `#{event_payload.event_type}`"
       end
     end
   end
