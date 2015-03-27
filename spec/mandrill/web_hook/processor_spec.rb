@@ -20,18 +20,57 @@ describe Mandrill::WebHook::Processor do
       end
     end
     context "with callback host" do
-      let(:callback_host) do
-        host = double()
-        host.stub(:handle_inbound)
-        host
+      shared_examples_for 'pass event payload to the handler' do
+
       end
+
+      let(:callback_host) { callback_host_class.new }
       let(:processor) { processor_class.new(params,callback_host) }
       let(:event1) { { "event" => "inbound" } }
       let(:event2) { { "event" => "inbound" } }
       let(:params) { { "mandrill_events" => [event1,event2].to_json } }
-      it "should pass event payload to the handler" do
-        callback_host.should_receive(:handle_inbound).twice
-        processor.run!
+
+      context "with handler method as public" do
+        let(:callback_host_class) do
+          Class.new do
+            public
+
+            def handle_inbound; end
+          end
+        end
+
+        it "should pass event payload to the handler" do
+          callback_host.should_receive(:handle_inbound).twice
+          processor.run!
+        end
+      end
+      context "with handler method as protected" do
+        let(:callback_host_class) do
+          Class.new do
+            protected
+
+            def handle_inbound; end
+          end
+        end
+
+        it "should pass event payload to the handler" do
+          callback_host.should_receive(:handle_inbound).twice
+          processor.run!
+        end
+      end
+      context "with handler method as private" do
+        let(:callback_host_class) do
+          Class.new do
+            private
+
+            def handle_inbound; end
+          end
+        end
+
+        it "should pass event payload to the handler" do
+          callback_host.should_receive(:handle_inbound).twice
+          processor.run!
+        end
       end
     end
     context "without handler method" do
