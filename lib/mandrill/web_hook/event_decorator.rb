@@ -66,9 +66,10 @@ class Mandrill::WebHook::EventDecorator < Hash
   end
 
   # Returns the email (String) of the sender.
-  # Applicable events: inbound
+  # Inbound messages: references 'from_email' message attribute.
+  # Send/Open/Click messages: references 'sender' message attribute.
   def sender_email
-    msg['sender']
+    msg['from_email']||msg['sender']
   end
 
   # Returns the subject user email address.
