@@ -2,7 +2,7 @@ require 'spec_helper'
 
 class WebHookProcessorTestHarness
   # Mock some controller behaviour
-  # TODO: we should probably really start using a real controller harness for testing
+  # TODO: we should probably start using a real controller harness for testing
   def self.skip_before_filter(*args) ; @skip_before_filter_settings = args; end
   def self.skip_before_filter_settings ; @skip_before_filter_settings; end
   def self.before_filter(*args) ; @before_filter_settings = args ; end
@@ -30,47 +30,46 @@ describe Mandrill::Rails::WebHookProcessor do
     it { should eql([:authenticate_mandrill_request!, {:only=>[:create]}]) }
   end
 
-  describe "##authenticate_with_mandrill_keys!" do
-    subject { processor_class.mandrill_webhook_keys }
-    it { should eql([]) }
-    context "when set with a single value" do
-      let(:key_a) { "key_a" }
-      before { processor_class.authenticate_with_mandrill_keys! key_a }
-      it { should eql([key_a]) }
-      context "then called with nil" do
-        before { processor_class.authenticate_with_mandrill_keys! nil }
-        it { should eql([]) }
-      end
-    end
-    context "when set with a list of values" do
-      let(:key_a) { "key_a" }
-      let(:key_b) { "key_b" }
-      before { processor_class.authenticate_with_mandrill_keys! key_a, key_b }
-      it { should eql([key_a,key_b]) }
-    end
-    context "when set with an explicit array of values" do
-      let(:key_a) { "key_a" }
-      let(:key_b) { "key_b" }
-      before { processor_class.authenticate_with_mandrill_keys! [key_a, key_b] }
-      it { should eql([key_a,key_b]) }
-    end
-  end
-
   describe "#mandrill_webhook_keys" do
     subject { processor_class.mandrill_webhook_keys }
-    it { should eql([]) }
+    context "when not set" do
+      it "is empty" do
+        expect(subject).to eql([])
+      end
+    end
     context "when set with mandrill_webhook_keys=" do
       let(:expected_value) { [1,2,3] }
       before { processor_class.mandrill_webhook_keys = expected_value }
       it { should eql(expected_value) }
     end
-    context "when set with authenticate_with_mandrill_keys!" do
-      let(:expected_value) { [4,5,6] }
-      before { processor_class.authenticate_with_mandrill_keys! expected_value }
-      it { should eql(expected_value) }
+    context "when authenticate_with_mandrill_keys! set" do
+      context "with an array" do
+        it "has the correct settings" do
+          processor_class.authenticate_with_mandrill_keys! [4,5,6]
+          expect(subject).to eql([4,5,6])
+        end
+      end
+      context "with a list" do
+        it "has the correct settings" do
+          processor_class.authenticate_with_mandrill_keys! "a", "b", "c"
+          expect(subject).to eql(["a", "b", "c"])
+        end
+      end
+      context "with a single value" do
+        it "has the correct settings" do
+          processor_class.authenticate_with_mandrill_keys! "key_a"
+          expect(subject).to eql(["key_a"])
+        end
+      end
+      context "with nil" do
+        it "has cleared settings" do
+          processor_class.authenticate_with_mandrill_keys! "key_a"
+          processor_class.authenticate_with_mandrill_keys! nil
+          expect(subject).to eql([])
+        end
+      end
     end
   end
-
 
   subject { processor_instance }
 
