@@ -17,7 +17,9 @@ describe Mandrill::Rails::WebHookProcessor do
   let(:processor_class) { WebHookProcessorTestHarness }
   let(:processor_instance) { processor_class.new }
   before do
+    # clear class instance settings
     processor_class.authenticate_with_mandrill_keys! nil
+    processor_class.on_unhandled_mandrill_events! nil
   end
 
   describe "##skip_before_filter settings" do
@@ -85,11 +87,33 @@ describe Mandrill::Rails::WebHookProcessor do
     before do
       processor_instance.params = params
     end
-    it "should return head(:ok)" do
+    it "returns head(:ok) on success" do
       expect(processor_instance).to receive(:head).with(:ok)
       expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:run!)
+      expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:on_unhandled_mandrill_events=).with(:log)
       processor_instance.create
     end
+
+    context "when unhandled events set to raise exceptions" do
+      it "delegates the setting to the processor" do
+        processor_instance.class.unhandled_events_raise_exceptions!
+        expect(processor_instance).to receive(:head).with(:ok)
+        expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:run!)
+        expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:on_unhandled_mandrill_events=).with(:raise_exception)
+        processor_instance.create
+      end
+    end
+
+    context "when unhandled events set to be ignored" do
+      it "delegates the setting to the processor" do
+        processor_instance.class.ignore_unhandled_events!
+        expect(processor_instance).to receive(:head).with(:ok)
+        expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:run!)
+        expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:on_unhandled_mandrill_events=).with(:ignore)
+        processor_instance.create
+      end
+    end
+
   end
 
   describe "#authenticate_mandrill_request! (protected)" do

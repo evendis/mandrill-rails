@@ -110,7 +110,30 @@ Note that Mandrill may send multiple event payloads in a single request, but you
 to worry about that. Each event payload will be unpacked from the request and dispatched to
 your handler individually.
 
-And if you don't care to handle a specific payload type - then just don't implement the associated handler.
+=== Do I need to handle all the event payloads that Mandrill send?
+
+No. It is optional. If you don't care to handle a specific payload type - then just don't implement the associated handler method.
+
+For example, your code in production only has a `handle_inbound` method, but you turn on click webhooks. What should happen?
+
+By default, click events will simply be ignored and logged (as errors) in the Rails log.
+
+You can change this behaviour. To completely ignore unhandled events (not even logging), add the `ignore_unhandled_events!`
+directive to your controller:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      ignore_unhandled_events!
+    end
+
+At the other extreme, if you want unhandled events to raise a hard exception, add the `unhandled_events_raise_exceptions!`
+directive to your controller:
+
+    class InboxController < ApplicationController
+      include Mandrill::Rails::WebHookProcessor
+      unhandled_events_raise_exceptions!
+    end
+
 
 === How can I authenticate Mandrill Webhooks?
 

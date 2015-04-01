@@ -1,13 +1,14 @@
 class Mandrill::WebHook::Processor
 
   attr_accessor :params, :callback_host, :mandrill_events
+  attr_accessor :on_unhandled_mandrill_events
 
   # Command initialise the processor with +params+ Hash.
   # +params+ is expected to contain an array of mandrill_events.
   # +callback_host+ is a handle to the controller making the request.
   def initialize(params={},callback_host=nil)
-    @params = params
-    @callback_host = callback_host
+    self.params = params
+    self.callback_host = callback_host
   end
 
   def mandrill_events
@@ -26,8 +27,15 @@ class Mandrill::WebHook::Processor
       elsif self.respond_to?(handler)
         self.send(handler,event_payload)
       else
-        raise Mandrill::Rails::Errors::MissingEventHandler,
-          "Expected handler method `#{handler}` for event type `#{event_payload.event_type}`"
+        error_message = "Expected handler method `#{handler}` for event type `#{event_payload.event_type}`"
+        case on_unhandled_mandrill_events
+        when :ignore
+          # NOP
+        when :raise_exception
+          raise Mandrill::Rails::Errors::MissingEventHandler, error_message
+        else
+          Rails.logger.error error_message rescue nil
+        end
       end
     end
   end

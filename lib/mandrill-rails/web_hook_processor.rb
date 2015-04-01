@@ -65,6 +65,21 @@ module Mandrill::Rails::WebHookProcessor
       @mandrill_webhook_keys = Array(keys)
     end
 
+    def on_unhandled_mandrill_events!(new_setting=nil)
+      @on_unhandled_mandrill_events = new_setting unless new_setting.nil?
+      @on_unhandled_mandrill_events ||= :log
+      @on_unhandled_mandrill_events
+    end
+
+    def ignore_unhandled_events!
+      on_unhandled_mandrill_events! :ignore
+    end
+
+    def unhandled_events_raise_exceptions!
+      on_unhandled_mandrill_events! :raise_exception
+    end
+
+
   end
 
   # Handles controller :show action (corresponds to a Mandrill "are you there?" test ping).
@@ -76,6 +91,7 @@ module Mandrill::Rails::WebHookProcessor
   # Handles controller :create action (corresponds to a POST from Mandrill).
   def create
     processor = Mandrill::WebHook::Processor.new(params, self)
+    processor.on_unhandled_mandrill_events = self.class.on_unhandled_mandrill_events!
     processor.run!
     head(:ok)
   end

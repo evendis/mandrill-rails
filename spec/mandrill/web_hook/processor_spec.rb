@@ -7,23 +7,23 @@ describe Mandrill::WebHook::Processor do
   let(:processor) { processor_class.new(params) }
 
   describe "#run!" do
-    context "with inbound events" do
+
+    context "when handler methods are present" do
       before do
         allow(processor_class).to receive(:handle_inbound)
+        allow(processor_class).to receive(:handle_click)
       end
       let(:event1) { { "event" => "inbound" } }
-      let(:event2) { { "event" => "inbound" } }
+      let(:event2) { { "event" => "click" } }
       let(:params) { { "mandrill_events" => [event1,event2].to_json } }
-      it "should pass event payload to the handler" do
-        expect(processor).to receive(:handle_inbound).twice
+      it "should pass all event payloads to the handler" do
+        expect(processor).to receive(:handle_inbound)
+        expect(processor).to receive(:handle_click)
         processor.run!
       end
     end
+
     context "with callback host" do
-      shared_examples_for 'pass event payload to the handler' do
-
-      end
-
       let(:callback_host) { callback_host_class.new }
       let(:processor) { processor_class.new(params,callback_host) }
       let(:event1) { { "event" => "inbound" } }
@@ -72,17 +72,49 @@ describe Mandrill::WebHook::Processor do
           processor.run!
         end
       end
-    end
-    context "without handler method" do
-      let(:event1) { { "event" => "inbound" } }
-      let(:event2) { { "event" => "inbound" } }
-      let(:params) { { "mandrill_events" => [event1,event2].to_json } }
 
-      it "raises error on run!" do
-        expect { processor.run! }
-        .to raise_error(Mandrill::Rails::Errors::MissingEventHandler)
+      context "with unhandled event" do
+        let(:callback_host_class) do
+          Class.new do
+          end
+        end
+        context "and default missing handler behaviour" do
+          before do
+            class ::Rails
+            end
+          end
+          after do
+            Object.send(:remove_const, :Rails)
+          end
+          it "logs an error" do
+            processor.on_unhandled_mandrill_events = :log
+            logger = double()
+            expect(logger).to receive(:error).twice
+            expect(Rails).to receive(:logger).twice.and_return(logger)
+            expect { processor.run! }.to_not raise_error
+          end
+        end
+
+        context "and ignore missing handler behaviour" do
+          it "logs an error" do
+            processor.on_unhandled_mandrill_events = :ignore
+            expect { processor.run! }.to_not raise_error
+          end
+        end
+
+        context "and raise_exception missing handler behaviour" do
+          it "raises an error" do
+            processor.on_unhandled_mandrill_events = :raise_exception
+            expect { processor.run! }
+            .to raise_error(Mandrill::Rails::Errors::MissingEventHandler)
+          end
+        end
+
       end
+
     end
+
+
   end
 
   describe "#wrap_payload" do
