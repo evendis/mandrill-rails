@@ -9,13 +9,13 @@ describe Mandrill::WebHook::Processor do
   describe "#run!" do
     context "with inbound events" do
       before do
-        processor_class.stub(:handle_inbound)
+        allow(processor_class).to receive(:handle_inbound)
       end
       let(:event1) { { "event" => "inbound" } }
       let(:event2) { { "event" => "inbound" } }
       let(:params) { { "mandrill_events" => [event1,event2].to_json } }
       it "should pass event payload to the handler" do
-        processor.should_receive(:handle_inbound).twice
+        expect(processor).to receive(:handle_inbound).twice
         processor.run!
       end
     end
@@ -40,7 +40,7 @@ describe Mandrill::WebHook::Processor do
         end
 
         it "should pass event payload to the handler" do
-          callback_host.should_receive(:handle_inbound).twice
+          expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
       end
@@ -54,7 +54,7 @@ describe Mandrill::WebHook::Processor do
         end
 
         it "should pass event payload to the handler" do
-          callback_host.should_receive(:handle_inbound).twice
+          expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
       end
@@ -68,7 +68,7 @@ describe Mandrill::WebHook::Processor do
         end
 
         it "should pass event payload to the handler" do
-          callback_host.should_receive(:handle_inbound).twice
+          expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
       end
@@ -88,7 +88,9 @@ describe Mandrill::WebHook::Processor do
   describe "#wrap_payload" do
     let(:raw_payload) { {} }
     subject { processor.wrap_payload(raw_payload) }
-    its(:class) { should eql(Mandrill::WebHook::EventDecorator) }
+    it "returns a decorated hash" do
+      expect(subject.class).to eql(Mandrill::WebHook::EventDecorator)
+    end
   end
 
   describe "##authentic?" do
@@ -100,19 +102,19 @@ describe Mandrill::WebHook::Processor do
     let(:params) { example_payload['raw_params'] }
     subject { processor_class.authentic?(expected_signature, mandrill_webhook_keys, original_url, params) }
     context "when valid" do
-      it { should be_true }
+      it { should eql(true) }
     end
     context "when no keys" do
       let(:mandrill_webhook_keys) { [] }
-      it { should be_true }
+      it { should eql(true) }
     end
     context "when keys don't match" do
       let(:mandrill_webhook_keys) { ['bogative'] }
-      it { should be_false }
+      it { should eql(false) }
     end
     context "when signature don't match" do
       let(:expected_signature) { 'bogative' }
-      it { should be_false }
+      it { should eql(false) }
     end
 
 
@@ -125,7 +127,9 @@ describe Mandrill::WebHook::Processor do
     let(:webhook_key) { example_payload['private_key'] }
     let(:params) { example_payload['raw_params'] }
     subject { processor_class.generate_signature(webhook_key, original_url, params) }
-    it { should eql(expected_signature) }
+    it "matches expected signature" do
+      expect(subject).to eql(expected_signature)
+    end
   end
 
 end

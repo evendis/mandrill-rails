@@ -21,13 +21,14 @@ describe Mandrill::WebHook::Attachment do
       :decoded_content_matches => /^%PDF-1.3/
     }
   ].each do |expectations|
-    describe expectations[:test_name] do
-      let(:attachment) { Mandrill::WebHook::Attachment[expectations[:given]] }
-      subject { attachment }
-      its(:name) { should eql(expectations[:name]) }
-      its(:type) { should eql(expectations[:type]) }
-      its(:content) { should match(expectations[:raw_content_matches]) }
-      its(:decoded_content) { should match(expectations[:decoded_content_matches]) }
+    context "when given #{expectations[:test_name]}" do
+      subject(:attachment) { Mandrill::WebHook::Attachment[expectations[:given]] }
+      it "exposes the file correctly" do
+        expect(attachment.name).to eql(expectations[:name])
+        expect(attachment.type).to eql(expectations[:type])
+        expect(attachment.content).to match(expectations[:raw_content_matches])
+        expect(attachment.decoded_content).to match(expectations[:decoded_content_matches])
+      end
     end
   end
 

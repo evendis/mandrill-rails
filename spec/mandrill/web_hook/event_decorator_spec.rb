@@ -142,10 +142,11 @@ describe Mandrill::WebHook::EventDecorator do
   }.each do |event_type,expectations|
     context "with #{event_type} event_type" do
       let(:raw_event) { webhook_example_event(event_type) }
-      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
-      subject { event_payload }
+      subject(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
       expectations.each do |attribute,expected_value|
-        its(attribute) { should eql(expected_value) }
+        it "has the correct #{attribute} value" do
+          expect(subject.send(attribute)).to eql(expected_value)
+        end
       end
     end
   end
@@ -153,110 +154,110 @@ describe Mandrill::WebHook::EventDecorator do
 
   describe "#message_body" do
     let(:raw_event) { webhook_example_event('inbound') }
-    let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+    subject(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
 
-    subject { event_payload.message_body(format) }
-    describe ":text" do
-      let(:expected) { "multi-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n" }
-      let(:format) { :text }
-      it { should eql(expected) }
-    end
-    describe ":html" do
-      let(:expected) { "multi-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n" }
-      let(:format) { :html }
-      it { should eql(expected) }
-    end
-    describe ":raw" do
-      let(:expected) { "Received: from mail-lpp01m010-f51.google.com (mail-lpp01m010-f51.google.com [209.85.215.51])\n\tby app01.transact (Postfix) with ESMTPS id F01841E0010A\n\tfor <to@example.com>; Thu, 9 Aug 2012 03:44:16 -0400 (EDT)\nReceived: by lahe6 with SMTP id e6so79326lah.24\n for <to@example.com>; Thu, 09 Aug 2012 00:44:15 -0700 (PDT)\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\n d=gmail.com; s=20120113;\n h=mime-version:date:message-id:subject:from:to:content-type;\n bh=9/e4o7vsyI5eIM2MUze13ZWWdxyhC7cxjHwrHXPSEJQ=;\n b=HOb83u8i6ai3HuT61C+NfQcUHqATH+/ivAjZ2pD/MXcCFboOyN9LGeMHm+RhwnL+Ap\n mC0R9+eqlWaoxqd6ugrvtNOQ1Kvb9LunPnnMwY06KZKpoXCVwFrzT3e2f8JgLwyAxpUv\n G0srziHwpuCh/y42dJ83tKhctHc6w6GKC79H1WBAcexnjvk0LgrkOnNJ/iBCOznjs35o\n V4jfjlJBeZLvxcnEJ5Xxade2kWbLZ9TWiuVfTS6xUyVb/gfn5x9D1KjCUb1Gwq9wYJ4m\n UxH6oC5f3mkM+NZ6oDBmJFDdVxg23rRaMrF4YBpVGj+6+pjF36N8CrmtaDOJNVqCS5FN\n koSw==\nMIME-Version: 1.0\nReceived: by 10.112.43.67 with SMTP id u3mr382471lbl.16.1344498255378; Thu, 09\n Aug 2012 00:44:15 -0700 (PDT)\nReceived: by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:44:15 -0700 (PDT)\nDate: Thu, 9 Aug 2012 15:44:15 +0800\nMessage-ID: <CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>\nSubject: [inbound] Sample Subject\nFrom: From Name <from@example.com>\nTo: to@example.com\nContent-Type: multipart/alternative; boundary=e0cb4efe2faee9b97304c6d0647b\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/plain; charset=UTF-8\n\nmulti-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/html; charset=UTF-8\n\nmulti-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n--e0cb4efe2faee9b97304c6d0647b--\n" }
-      let(:format) { :raw }
-      it { should eql(expected) }
+    it "formats the message_body correctly" do
+      expected_text = "multi-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n"
+      expect(event_payload.message_body(:text)).to eql(expected_text)
+
+      expected_html = "multi-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n"
+      expect(event_payload.message_body(:html)).to eql(expected_html)
+
+      expected_raw = "Received: from mail-lpp01m010-f51.google.com (mail-lpp01m010-f51.google.com [209.85.215.51])\n\tby app01.transact (Postfix) with ESMTPS id F01841E0010A\n\tfor <to@example.com>; Thu, 9 Aug 2012 03:44:16 -0400 (EDT)\nReceived: by lahe6 with SMTP id e6so79326lah.24\n for <to@example.com>; Thu, 09 Aug 2012 00:44:15 -0700 (PDT)\nDKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;\n d=gmail.com; s=20120113;\n h=mime-version:date:message-id:subject:from:to:content-type;\n bh=9/e4o7vsyI5eIM2MUze13ZWWdxyhC7cxjHwrHXPSEJQ=;\n b=HOb83u8i6ai3HuT61C+NfQcUHqATH+/ivAjZ2pD/MXcCFboOyN9LGeMHm+RhwnL+Ap\n mC0R9+eqlWaoxqd6ugrvtNOQ1Kvb9LunPnnMwY06KZKpoXCVwFrzT3e2f8JgLwyAxpUv\n G0srziHwpuCh/y42dJ83tKhctHc6w6GKC79H1WBAcexnjvk0LgrkOnNJ/iBCOznjs35o\n V4jfjlJBeZLvxcnEJ5Xxade2kWbLZ9TWiuVfTS6xUyVb/gfn5x9D1KjCUb1Gwq9wYJ4m\n UxH6oC5f3mkM+NZ6oDBmJFDdVxg23rRaMrF4YBpVGj+6+pjF36N8CrmtaDOJNVqCS5FN\n koSw==\nMIME-Version: 1.0\nReceived: by 10.112.43.67 with SMTP id u3mr382471lbl.16.1344498255378; Thu, 09\n Aug 2012 00:44:15 -0700 (PDT)\nReceived: by 10.114.69.44 with HTTP; Thu, 9 Aug 2012 00:44:15 -0700 (PDT)\nDate: Thu, 9 Aug 2012 15:44:15 +0800\nMessage-ID: <CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>\nSubject: [inbound] Sample Subject\nFrom: From Name <from@example.com>\nTo: to@example.com\nContent-Type: multipart/alternative; boundary=e0cb4efe2faee9b97304c6d0647b\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/plain; charset=UTF-8\n\nmulti-line content\n\n*multi-line content\n*\n*with some formatting*\n\nmulti-line content\n\n--e0cb4efe2faee9b97304c6d0647b\nContent-Type: text/html; charset=UTF-8\n\nmulti-line content<br><br><b>multi-line content<br></b>\n<br><i>with some formatting</i><br><br>\nmulti-line content<br>\n<br>\n<br>\n\n--e0cb4efe2faee9b97304c6d0647b--\n"
+      expect(event_payload.message_body(:raw)).to eql(expected_raw)
     end
 
     context "when msg is missing" do
       let(:raw_event) { webhook_example_event('inbound_without_msg') }
-      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
 
-      subject { event_payload }
-      its(:message_body) { should be_nil }
-      its(:message_id) { should be_nil }
-      its(:sender_email) { should be_nil }
+      it "has null message attributes" do
+        expect(subject.message_body).to be_nil
+        expect(subject.message_id).to be_nil
+        expect(subject.sender_email).to be_nil
+      end
     end
 
     context "with html-only payload; see github issue \#8" do
       let(:raw_event) { webhook_example_event('inbound_html_only') }
-      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
 
-      subject { event_payload }
-      its(:message_body) { should_not be_nil }
-      it { subject.message_body(:html).should_not be_nil }
-      it { subject.message_body(:text).should be_nil }
-      its(:message_id) { should eql('<OFA804C4DE.C8619FB4-ON80257C30.004A7A89-80257C30.004A7A94@xxxxx.co.uk>') }
-      its(:sender_email) { should eql('Leeroy.xxxx@xxxx.co.uk') }
+      it "has all message attributes except text body" do
+        expect(subject.message_body).to be_present
+        expect(subject.message_body(:html)).to be_present
+        expect(subject.message_body(:text)).to be_nil
+        expect(subject.message_id).to eql('<OFA804C4DE.C8619FB4-ON80257C30.004A7A89-80257C30.004A7A94@xxxxx.co.uk>')
+        expect(subject.sender_email).to eql('Leeroy.xxxx@xxxx.co.uk')
+      end
     end
 
     context "with text-only payload" do
       let(:raw_event) { webhook_example_event('inbound_text_only') }
-      let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
 
-      subject { event_payload }
-      its(:message_body) { should_not be_nil }
-      it { subject.message_body(:html).should be_nil }
-      it { subject.message_body(:text).should_not be_nil }
-      its(:message_id) { should eql('<CAGBx7Gg-CUco7NNsA79Ss1QMFTaXvyWnqkt26=RJr-ktSoRB0A@mail.gmail.com>') }
-      its(:sender_email) { should eql('from@example.com') }
+      it "has all message attributes except html body" do
+        expect(subject.message_body).to be_present
+        expect(subject.message_body(:html)).to be_nil
+        expect(subject.message_body(:text)).to be_present
+        expect(subject.message_id).to eql('<CAGBx7Gg-CUco7NNsA79Ss1QMFTaXvyWnqkt26=RJr-ktSoRB0A@mail.gmail.com>')
+        expect(subject.sender_email).to eql('from@example.com')
+      end
     end
   end
 
   describe "#attachments" do
-    let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
-    subject { event_payload.attachments }
+    let(:event_payload)   { Mandrill::WebHook::EventDecorator[raw_event] }
+    let(:attachment)      { attachments.first }
+    subject(:attachments) { event_payload.attachments }
 
     context "when single text attachment" do
-      let(:raw_event) { webhook_example_event('inbound_with_txt_attachment') }
-      its(:count) { should eql(1) }
-      describe "attachment" do
-        subject { event_payload.attachments.first }
-        its(:name) { should eql('sample.txt') }
-        its(:type) { should eql('text/plain') }
-        its(:content) { should eql("This is \na sample\ntext file\n") }
-        its(:decoded_content) { should eql("This is \na sample\ntext file\n") }
-        its(:decoded_content) { should eql(payload_example('sample.txt')) }
+      let(:raw_event)  { webhook_example_event('inbound_with_txt_attachment') }
+
+      it "is presented in attachments accessor correctly" do
+        expect(attachments.count).to eql(1)
+        expect(attachment.name).to eql('sample.txt')
+        expect(attachment.type).to eql('text/plain')
+        expect(attachment.content).to eql("This is \na sample\ntext file\n")
+        expect(attachment.decoded_content).to eql("This is \na sample\ntext file\n")
+        expect(attachment.decoded_content).to eql(payload_example('sample.txt'))
       end
     end
 
     context "when single pdf attachment" do
       let(:raw_event) { webhook_example_event('inbound_with_pdf_attachment') }
-      its(:count) { should eql(1) }
-      describe "attachment" do
-        subject { event_payload.attachments.first }
-        its(:name) { should eql('sample.pdf') }
-        its(:type) { should eql('application/pdf') }
-        its(:content) { should match(/^JVBERi0xL/) }
-        its(:decoded_content) { should match(/^%PDF-1.3/) }
-        it "decoded_content should exactly match the original" do
-          original_digest = Digest::SHA1.hexdigest(payload_example('sample.pdf'))
-          decoded_digest = Digest::SHA1.hexdigest(subject.decoded_content)
-          original_digest.should eql(decoded_digest)
-        end
+      it "is presented in attachments accessor correctly" do
+        expect(attachments.count).to eql(1)
+        expect(attachment.name).to eql('sample.pdf')
+        expect(attachment.type).to eql('application/pdf')
+        expect(attachment.content).to match(/^JVBERi0xL/)
+        expect(attachment.decoded_content).to match(/^%PDF-1.3/)
+      end
+      it "decoded_content exactly matches the original" do
+        original_digest = Digest::SHA1.hexdigest(payload_example('sample.pdf'))
+        decoded_digest = Digest::SHA1.hexdigest(attachment.decoded_content)
+        expect(original_digest).to eql(decoded_digest)
       end
     end
 
     context "when multiple attachments" do
       let(:raw_event) { webhook_example_event('inbound_with_multiple_attachments') }
-      its(:count) { should eql(2) }
+      it "are presented in attachments accessor correctly" do
+        expect(attachments.count).to eql(2)
+      end
       describe "pdf attachment" do
-        subject { event_payload.attachments.select{|a| a.type =~ /pdf/ }.first }
-        its(:name) { should eql('sample.pdf') }
-        its(:type) { should eql('application/pdf') }
-        its(:content) { should match(/^JVBERi0xL/) }
-        its(:decoded_content) { should match(/^%PDF-1.3/) }
+        subject(:attachment) { attachments.select{|a| a.type =~ /pdf/ }.first }
+        it "has correct attributes" do
+          expect(attachment.name).to eql('sample.pdf')
+          expect(attachment.type).to eql('application/pdf')
+          expect(attachment.content).to match(/^JVBERi0xL/)
+          expect(attachment.decoded_content).to match(/^%PDF-1.3/)
+        end
       end
       describe "txt attachment" do
-        subject { event_payload.attachments.select{|a| a.type =~ /plain/ }.first }
-        its(:name) { should eql('sample.txt') }
-        its(:type) { should eql('text/plain') }
-        its(:content) { should eql("This is \na sample\ntext file\n") }
-        its(:decoded_content) { should eql("This is \na sample\ntext file\n") }
+        subject(:attachment) { attachments.select{|a| a.type =~ /plain/ }.first }
+        it "has correct attributes" do
+          expect(attachment.name).to eql('sample.txt')
+          expect(attachment.type).to eql('text/plain')
+          expect(attachment.content).to eql("This is \na sample\ntext file\n")
+          expect(attachment.decoded_content).to eql("This is \na sample\ntext file\n")
+        end
       end
     end
 

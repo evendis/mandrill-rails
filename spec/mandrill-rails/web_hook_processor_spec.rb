@@ -76,7 +76,7 @@ describe Mandrill::Rails::WebHookProcessor do
 
   describe "#show" do
     it "should return head(:ok)" do
-      processor_instance.should_receive(:head).with(:ok)
+      expect(processor_instance).to receive(:head).with(:ok)
       processor_instance.show
     end
   end
@@ -87,8 +87,8 @@ describe Mandrill::Rails::WebHookProcessor do
       processor_instance.params = params
     end
     it "should return head(:ok)" do
-      processor_instance.should_receive(:head).with(:ok)
-      Mandrill::WebHook::Processor.any_instance.should_receive(:run!)
+      expect(processor_instance).to receive(:head).with(:ok)
+      expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:run!)
       processor_instance.create
     end
   end
@@ -103,16 +103,16 @@ describe Mandrill::Rails::WebHookProcessor do
     let(:headers) { { 'HTTP_X_MANDRILL_SIGNATURE' => expected_signature} }
     let(:request) { double() }
     before do
-      request.stub(:original_url).and_return(original_url)
-      request.stub(:request_parameters).and_return(raw_params)
-      request.stub(:headers).and_return(headers)
+      allow(request).to receive(:original_url).and_return(original_url)
+      allow(request).to receive(:request_parameters).and_return(raw_params)
+      allow(request).to receive(:headers).and_return(headers)
       processor_instance.request = request
       processor_instance.params = params
     end
     subject { processor_instance.send(:authenticate_mandrill_request!) }
 
     context "when authentication not enabled" do
-      it { should be_true }
+      it { should eql(true) }
     end
     context "when authentication enabled" do
       before do
@@ -120,17 +120,17 @@ describe Mandrill::Rails::WebHookProcessor do
       end
       context "with valid key" do
         let(:mandrill_webhook_keys) { valid_webhook_key }
-        it { should be_true }
+        it { should eql(true) }
       end
       context "with mix of valid and invalid keys" do
         let(:mandrill_webhook_keys) { ['bogative',valid_webhook_key] }
-        it { should be_true }
+        it { should eql(true) }
       end
       context "with invalid key" do
         let(:mandrill_webhook_keys) { 'bogative' }
         it "should call head(:forbidden) and return false" do
-          processor_instance.should_receive(:head).with(:forbidden, :text => "Mandrill signature did not match.")
-          subject.should be_false
+          expect(processor_instance).to receive(:head).with(:forbidden, :text => "Mandrill signature did not match.")
+          expect(subject).to eql(false)
         end
       end
     end
