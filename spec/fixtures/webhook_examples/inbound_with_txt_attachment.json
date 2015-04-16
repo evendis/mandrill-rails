@@ -4,6 +4,7 @@
     "msg": {
       "attachments": {
         "sample.txt": {
+          "base64": false,
           "content": "This is \na sample\ntext file\n",
           "name": "sample.txt",
           "type": "text/plain"
