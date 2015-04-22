@@ -19,17 +19,22 @@ class Mandrill::WebHook::Attachment < Hash
     self['type']
   end
 
-  # Returns the raw attachment content, which may be base64 encoded if not plain text
+  # Returns the raw attachment content, which may be base64 encoded
   def content
     self['content']
   end
 
+  # Returns a boolean for whether the attachment content is base64 encoded
+  def base64
+    self['base64']
+  end
+
   # Returns the decoded content for the attachment
   def decoded_content
-    if type =~ /^text/
-      content
-    else # assume it is base64-encoded
+    if base64
       Base64.decode64(content)
+    else
+      content
     end
   rescue # any decoding error, just return the content
     content

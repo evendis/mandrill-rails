@@ -214,6 +214,7 @@ describe Mandrill::WebHook::EventDecorator do
         expect(attachments.count).to eql(1)
         expect(attachment.name).to eql('sample.txt')
         expect(attachment.type).to eql('text/plain')
+        expect(attachment.base64).to be(false)
         expect(attachment.content).to eql("This is \na sample\ntext file\n")
         expect(attachment.decoded_content).to eql("This is \na sample\ntext file\n")
         expect(attachment.decoded_content).to eql(payload_example('sample.txt'))
@@ -226,6 +227,7 @@ describe Mandrill::WebHook::EventDecorator do
         expect(attachments.count).to eql(1)
         expect(attachment.name).to eql('sample.pdf')
         expect(attachment.type).to eql('application/pdf')
+        expect(attachment.base64).to be(true)
         expect(attachment.content).to match(/^JVBERi0xL/)
         expect(attachment.decoded_content).to match(/^%PDF-1.3/)
       end
@@ -246,6 +248,7 @@ describe Mandrill::WebHook::EventDecorator do
         it "has correct attributes" do
           expect(attachment.name).to eql('sample.pdf')
           expect(attachment.type).to eql('application/pdf')
+          expect(attachment.base64).to be(true)
           expect(attachment.content).to match(/^JVBERi0xL/)
           expect(attachment.decoded_content).to match(/^%PDF-1.3/)
         end
@@ -255,6 +258,7 @@ describe Mandrill::WebHook::EventDecorator do
         it "has correct attributes" do
           expect(attachment.name).to eql('sample.txt')
           expect(attachment.type).to eql('text/plain')
+          expect(attachment.base64).to be(false)
           expect(attachment.content).to eql("This is \na sample\ntext file\n")
           expect(attachment.decoded_content).to eql("This is \na sample\ntext file\n")
         end
