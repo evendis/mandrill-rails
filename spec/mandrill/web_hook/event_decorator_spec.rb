@@ -267,6 +267,54 @@ describe Mandrill::WebHook::EventDecorator do
 
   end
 
+  describe "#images" do
+    let(:event_payload) { Mandrill::WebHook::EventDecorator[raw_event] }
+    let(:image)         { images.first }
+    subject(:images)    { event_payload.images }
+
+    context "when single image" do
+      let(:raw_event) { webhook_example_event('inbound_with_image') }
+      it "is presented in images accessor correctly" do
+        expect(images.count).to eql(1)
+        expect(image.name).to eql('sample.png')
+        expect(image.type).to eql('image/png')
+        expect(image.content).to match(/^iVBORw0K/)
+        expect(image.decoded_content).to match(/^\x89PNG\r\n/n)
+      end
+      it "decoded_content exactly matches the original" do
+        original_digest = Digest::SHA1.hexdigest(payload_example('sample.png'))
+        decoded_digest = Digest::SHA1.hexdigest(image.decoded_content)
+        expect(original_digest).to eql(decoded_digest)
+      end
+    end
+
+    context "when multiple images" do
+      let(:raw_event) { webhook_example_event('inbound_with_multiple_images') }
+      it "are presented in images accessor correctly" do
+        expect(images.count).to eql(2)
+      end
+      describe "jpg image" do
+        subject(:image) { images.select{|a| a.type =~ /jpeg/ }.first }
+        it "has correct attributes" do
+          expect(image.name).to eql('sample.jpg')
+          expect(image.type).to eql('image/jpeg')
+          expect(image.content).to match(/^\/9j\/4AAQSkZJRg/)
+          expect(image.decoded_content).to match(/^\xFF\xD8\xFF\xE0\x00\x10JFIF/n)
+        end
+      end
+      describe "png image" do
+        subject(:image) { images.select{|a| a.type =~ /png/ }.first }
+        it "has correct attributes" do
+          expect(image.name).to eql('sample.png')
+          expect(image.type).to eql('image/png')
+          expect(image.content).to match(/^iVBORw0K/)
+          expect(image.decoded_content).to match(/^\x89PNG\r\n/n)
+        end
+      end
+    end
+
+  end
+
 
 end
 
