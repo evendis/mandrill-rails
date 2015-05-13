@@ -103,11 +103,11 @@ class Mandrill::WebHook::EventDecorator < Hash
     (msg['attachments']||{}).map{|attached| Mandrill::WebHook::Attachment[attached.last] }
   end
 
-  # Returns an array of Mandrill::WebHook::Attachment objects describing each attached image
+  # Returns an array of Mandrill::WebHook::Image objects describing each attached image
   #   [ image, image, .. ]
   # Applicable events: inbound
   def images
-    (msg['images']||{}).map{|image| Mandrill::WebHook::Attachment[image.last] }
+    (msg['images']||{}).map{|image| Mandrill::WebHook::Image[image.last] }
   end
 
   # Returns the +format+ (:text,:html,:raw) message body.
