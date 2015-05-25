@@ -195,7 +195,7 @@ some are included in the project source under spec/fixtures/webhook_examples.
 
 === What additional methods does event_payload provide to help extract payload-specific elements?
 
-In addition to prividing full Hash-like access to the raw message, the <tt>event_payload</tt> object
+In addition to providing full Hash-like access to the raw message, the <tt>event_payload</tt> object
 (a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
 things you might need to do with the payload. Here are some examples (see
 {Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator]
@@ -269,8 +269,10 @@ For example:
         # => e.g. 'sample.pdf'
         a1.type
         # => e.g. 'application/pdf'
+        a1.base64
+        # => true
         a1.content
-        # => this is the raw content provided by Mandrill, and will be base64-encoded if not plain text
+        # => this is the raw content provided by Mandrill, and may be base64-encoded
         # e.g. 'JVBERi0xLjMKJcTl8uXrp/Og0MTGCjQgMCBvY ... (etc)'
         a1.decoded_content
         # => this is the content decoded by Mandrill::Rails, ready to be written as a File or whatever
@@ -278,6 +280,34 @@ For example:
 
       end
     end
+
+
+=== How do I extract images from an inbound email?
+
+The EventDecorator class provides an <tt>images</tt> method to access an array of images (if any).
+Each image is encapsulated in a class that describes the name, mime type, raw and decoded content.
+
+For example:
+
+    def handle_inbound(event_payload)
+      if images = event_payload.images.presence
+        # yes, we have at least 1 image. Lets look at the first:
+        a1 = images.first
+        a1.name
+        # => e.g. 'sample.png'
+        a1.type
+        # => e.g. 'image/png'
+        a1.base64
+        # => true # always
+        a1.content
+        # => this is the raw content provided by Mandrill (always base64)
+        # e.g. 'iVBORw0K ... (etc)'
+        a1.decoded_content
+        # => this is the content decoded by Mandrill::Rails, ready to be written as a File or whatever
+        # e.g. '\x89PNG\r\n ... (etc)'
+      end
+    end
+
 
 === How do I use Mandrill API features with Mandrill::Rails?
 
