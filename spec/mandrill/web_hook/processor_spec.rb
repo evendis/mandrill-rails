@@ -9,16 +9,21 @@ describe Mandrill::WebHook::Processor do
   describe "#run!" do
 
     context "when handler methods are present" do
+      let(:event1) { { "event" => "inbound" } }
+      let(:event2) { { "event" => "click" } }
+      let(:event3) { { "type" => "blacklist" } }
+      let(:params) { { "mandrill_events" => [event1, event2, event3].to_json } }
+
       before do
         allow(processor_class).to receive(:handle_inbound)
         allow(processor_class).to receive(:handle_click)
+        allow(processor_class).to receive(:handle_sync)
       end
-      let(:event1) { { "event" => "inbound" } }
-      let(:event2) { { "event" => "click" } }
-      let(:params) { { "mandrill_events" => [event1,event2].to_json } }
+
       it "should pass all event payloads to the handler" do
         expect(processor).to receive(:handle_inbound)
         expect(processor).to receive(:handle_click)
+        expect(processor).to receive(:handle_sync)
         processor.run!
       end
     end
@@ -109,19 +114,7 @@ describe Mandrill::WebHook::Processor do
             .to raise_error(Mandrill::Rails::Errors::MissingEventHandler)
           end
         end
-
       end
-
-    end
-
-
-  end
-
-  describe "#wrap_payload" do
-    let(:raw_payload) { {} }
-    subject { processor.wrap_payload(raw_payload) }
-    it "returns a decorated hash" do
-      expect(subject.class).to eql(Mandrill::WebHook::EventDecorator)
     end
   end
 
