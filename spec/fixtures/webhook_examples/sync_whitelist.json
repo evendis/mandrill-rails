@@ -1,0 +1,12 @@
+[
+  {
+    "type": "whitelist",
+    "action": "add",
+    "reject": {
+      "detail": "this is a mock event, replace with a real example when available",
+      "email": "test@example.net",
+      "created_at": "2015-02-01 01:02:03"
+    },
+    "ts": 1350377135
+  }
+]

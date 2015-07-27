@@ -177,6 +177,29 @@ describe Mandrill::WebHook::EventDecorator do
       :click => nil,
       :all_clicks => [],
       :all_clicked_links => []
+    },
+    'sync_whitelist' => {
+      :event_type => 'sync',
+      :sync_type => 'whitelist',
+      :reject => {
+        "detail"=>"this is a mock event, replace with a real example when available",
+        "email"=>"test@example.net",
+        "created_at"=>"2015-02-01 01:02:03"
+      },
+      :subject => nil,
+      :message_id => nil,
+      :message_version => nil,
+      :in_reply_to => nil,
+      :references => [],
+      :headers => {},
+      :sender_email => nil,
+      :user_email => "test@example.net",
+      :recipients => [],
+      :recipient_emails => [],
+      :message_body => nil,
+      :click => nil,
+      :all_clicks => [],
+      :all_clicked_links => []
     }
   }.each do |event_type,expectations|
     context "with #{event_type} event_type" do
