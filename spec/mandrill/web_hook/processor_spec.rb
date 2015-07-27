@@ -20,7 +20,7 @@ describe Mandrill::WebHook::Processor do
         allow(processor_class).to receive(:handle_sync)
       end
 
-      it "should pass all event payloads to the handler" do
+      it "passes all event payloads to the handler" do
         expect(processor).to receive(:handle_inbound)
         expect(processor).to receive(:handle_click)
         expect(processor).to receive(:handle_sync)
@@ -44,7 +44,7 @@ describe Mandrill::WebHook::Processor do
           end
         end
 
-        it "should pass event payload to the handler" do
+        it "passes event payload to the handler" do
           expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
@@ -58,7 +58,7 @@ describe Mandrill::WebHook::Processor do
           end
         end
 
-        it "should pass event payload to the handler" do
+        it "passes event payload to the handler" do
           expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
@@ -72,7 +72,7 @@ describe Mandrill::WebHook::Processor do
           end
         end
 
-        it "should pass event payload to the handler" do
+        it "passes event payload to the handler" do
           expect(callback_host).to receive(:handle_inbound).twice
           processor.run!
         end
@@ -101,7 +101,7 @@ describe Mandrill::WebHook::Processor do
         end
 
         context "and ignore missing handler behaviour" do
-          it "logs an error" do
+          it "keeps calm and carries on" do
             processor.on_unhandled_mandrill_events = :ignore
             expect { processor.run! }.to_not raise_error
           end
@@ -127,19 +127,27 @@ describe Mandrill::WebHook::Processor do
     let(:params) { example_payload['raw_params'] }
     subject { processor_class.authentic?(expected_signature, mandrill_webhook_keys, original_url, params) }
     context "when valid" do
-      it { should eql(true) }
+      it "passes" do
+        expect(subject).to eql(true)
+      end
     end
     context "when no keys" do
       let(:mandrill_webhook_keys) { [] }
-      it { should eql(true) }
+      it "passes" do
+        expect(subject).to eql(true)
+      end
     end
     context "when keys don't match" do
       let(:mandrill_webhook_keys) { ['bogative'] }
-      it { should eql(false) }
+      it "fails" do
+        expect(subject).to eql(false)
+      end
     end
     context "when signature don't match" do
       let(:expected_signature) { 'bogative' }
-      it { should eql(false) }
+      it "fails" do
+        expect(subject).to eql(false)
+      end
     end
 
 

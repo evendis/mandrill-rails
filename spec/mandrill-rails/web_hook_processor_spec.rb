@@ -24,12 +24,16 @@ describe Mandrill::Rails::WebHookProcessor do
 
   describe "##skip_before_filter settings" do
     subject { processor_class.skip_before_filter_settings }
-    it { should eql([:verify_authenticity_token]) }
+    it "includes verify_authenticity_token" do
+      expect(subject).to eql([:verify_authenticity_token])
+    end
   end
 
   describe "##before_filter settings" do
     subject { processor_class.before_filter_settings }
-    it { should eql([:authenticate_mandrill_request!, {:only=>[:create]}]) }
+    it "includes authenticate_mandrill_request" do
+      expect(subject).to eql([:authenticate_mandrill_request!, {:only=>[:create]}])
+    end
   end
 
   describe "#mandrill_webhook_keys" do
@@ -135,7 +139,9 @@ describe Mandrill::Rails::WebHookProcessor do
     subject { processor_instance.send(:authenticate_mandrill_request!) }
 
     context "when authentication not enabled" do
-      it { should eql(true) }
+      it "passes" do
+        expect(subject).to eql(true)
+      end
     end
     context "when authentication enabled" do
       before do
@@ -143,15 +149,19 @@ describe Mandrill::Rails::WebHookProcessor do
       end
       context "with valid key" do
         let(:mandrill_webhook_keys) { valid_webhook_key }
-        it { should eql(true) }
+        it "passes" do
+          expect(subject).to eql(true)
+        end
       end
       context "with mix of valid and invalid keys" do
         let(:mandrill_webhook_keys) { ['bogative',valid_webhook_key] }
-        it { should eql(true) }
+        it "passes" do
+          expect(subject).to eql(true)
+        end
       end
       context "with invalid key" do
         let(:mandrill_webhook_keys) { 'bogative' }
-        it "should call head(:forbidden) and return false" do
+        it "calls head(:forbidden) and return false" do
           expect(processor_instance).to receive(:head).with(:forbidden, :text => "Mandrill signature did not match.")
           expect(subject).to eql(false)
         end

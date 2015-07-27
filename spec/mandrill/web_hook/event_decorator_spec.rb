@@ -281,7 +281,7 @@ describe Mandrill::WebHook::EventDecorator do
         expect(image.content).to match(/^iVBORw0K/)
         expect(image.decoded_content).to match(/^\x89PNG\r\n/n)
       end
-      it "decoded_content exactly matches the original" do
+      it "has decoded_content exactly matching the original" do
         original_digest = Digest::SHA1.hexdigest(payload_example('sample.png'))
         decoded_digest = Digest::SHA1.hexdigest(image.decoded_content)
         expect(original_digest).to eql(decoded_digest)
