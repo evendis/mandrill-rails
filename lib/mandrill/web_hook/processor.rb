@@ -12,9 +12,7 @@ class Mandrill::WebHook::Processor
   end
 
   def mandrill_events
-    @mandrill_events ||= JSON.parse(params['mandrill_events'] || '[]')
-  rescue
-    @mandrill_events = []
+    @mandrill_events ||= JSON.parse(params['mandrill_events']) rescue []
   end
 
   # Command: processes all +mandrill_events+

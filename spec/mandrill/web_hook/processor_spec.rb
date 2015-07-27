@@ -27,6 +27,12 @@ describe Mandrill::WebHook::Processor do
         processor.run!
       end
     end
+    context "but no valid handler methods are present" do
+      let(:params) { nil }
+      it "keeps calm and carries on" do
+        processor.run!
+      end
+    end
 
     context "with callback host" do
       let(:callback_host) { callback_host_class.new }
