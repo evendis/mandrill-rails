@@ -20,6 +20,8 @@ describe Mandrill::WebHook::EventDecorator do
   {
     'inbound' => {
       :event_type => 'inbound',
+      :sync_type => nil,
+      :reject => {},
       :subject => '[inbound] Sample Subject',
       :message_id => '<CAGBx7GhULS7d6ZsdLREHnKQ68V6w2fbGmD85dPn63s6RtpsZeQ@mail.gmail.com>',
       :message_version => nil,
@@ -47,6 +49,8 @@ describe Mandrill::WebHook::EventDecorator do
     },
     'inbound_reply' => {
       :event_type => 'inbound',
+      :sync_type => nil,
+      :reject => {},
       :subject => '[inbound] Sample Subject 2',
       :message_id => '<CAGBx7GhsVk7Q-aO-FQ-m+Oix7GQyEVHyL60qv0__G8EpH8pA4w@mail.gmail.com>',
       :message_version => nil,
@@ -80,6 +84,8 @@ describe Mandrill::WebHook::EventDecorator do
     },
     'click' => {
       :event_type => 'click',
+      :sync_type => nil,
+      :reject => {},
       :subject => '[click] Sample Subject',
       :message_id => '8606637.6692f6cac28e45a9b371e182d5ca0a35',
       :message_version => 5,
@@ -107,6 +113,8 @@ describe Mandrill::WebHook::EventDecorator do
     },
     'send' => {
       :event_type => 'send',
+      :sync_type => nil,
+      :reject => {},
       :subject => '[send] Sample Subject',
       :message_id => '9a32184309ad4d5e9bfd20368d9d7981',
       :message_version => nil,
@@ -124,6 +132,8 @@ describe Mandrill::WebHook::EventDecorator do
     },
     'open' => {
       :event_type => 'open',
+      :sync_type => nil,
+      :reject => {},
       :subject => '[open] Sample Subject',
       :message_id => '12847763.9a32184309ad4d5e9bfd20368d9d7981',
       :message_version => 3,
@@ -139,6 +149,35 @@ describe Mandrill::WebHook::EventDecorator do
       :all_clicks => [{"ts"=>1350693098, "url"=>"http://feedproxy.google.com/~r/AccidentalTechnologist/~3/Jc7hYTVjcmM/"}],
       :all_clicked_links => ["http://feedproxy.google.com/~r/AccidentalTechnologist/~3/Jc7hYTVjcmM/"]
     },
+    'sync_blacklist' => {
+      :event_type => 'sync',
+      :sync_type => 'blacklist',
+      :reject => {
+        "reason"=>"test",
+        "detail"=>"this is a mock event, replace with a real example when available",
+        "last_event_at"=>"2015-01-01 01:02:03",
+        "email"=>"test@example.net",
+        "created_at"=>"2015-02-01 01:02:03",
+        "expires_at"=>"2016-01-01 01:02:03",
+        "expired"=>"false",
+        "subaccount"=>"",
+        "sender"=>"sender@example.net"
+      },
+      :subject => nil,
+      :message_id => nil,
+      :message_version => nil,
+      :in_reply_to => nil,
+      :references => [],
+      :headers => {},
+      :sender_email => "sender@example.net",
+      :user_email => "test@example.net",
+      :recipients => [],
+      :recipient_emails => [],
+      :message_body => nil,
+      :click => nil,
+      :all_clicks => [],
+      :all_clicked_links => []
+    }
   }.each do |event_type,expectations|
     context "with #{event_type} event_type" do
       let(:raw_event) { webhook_example_event(event_type) }

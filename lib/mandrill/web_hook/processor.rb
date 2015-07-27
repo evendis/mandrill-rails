@@ -50,15 +50,9 @@ class Mandrill::WebHook::Processor
   private
 
 
-  # Returns event handler method name
-  def method_name(event_payload)
-    event_type = event_payload['type'].present? ? 'sync' : event_payload['event']
-
-    "handle_#{event_type}".to_sym
-  end
-
+  # Command: attempts to process +event_payload+
   def process_event(event_payload)
-    handler = method_name(event_payload)
+    handler = "handle_#{event_payload.event_type}".to_sym
 
     if callback_host && callback_host.respond_to?(handler, true)
       callback_host.send(handler,event_payload)

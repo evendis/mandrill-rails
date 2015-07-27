@@ -1,0 +1,18 @@
+[
+  {
+    "type": "blacklist",
+    "action": "add",
+    "reject": {
+      "reason": "test",
+      "detail": "this is a mock event, replace with a real example when available",
+      "last_event_at": "2015-01-01 01:02:03",
+      "email": "test@example.net",
+      "created_at": "2015-02-01 01:02:03",
+      "expires_at": "2016-01-01 01:02:03",
+      "expired": "false",
+      "subaccount": "",
+      "sender": "sender@example.net"
+    },
+    "ts": 1350377135
+  }
+]

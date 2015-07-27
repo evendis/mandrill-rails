@@ -13,7 +13,23 @@ class Mandrill::WebHook::EventDecorator < Hash
   # Returns the event type.
   # Applicable events: all
   def event_type
-    self['event']
+    self['event'] || if sync_type.present?
+      'sync'
+    end
+  end
+
+  # Returns the sync type.
+  # Applicable events: sync
+  def sync_type
+    if %w(blacklist whitelist).include?(type = self['type'])
+      type
+    end
+  end
+
+  # Returns the reject Hash.
+  # Applicable events: sync
+  def reject
+    self['reject']||{}
   end
 
   # Returns the message subject.
@@ -69,14 +85,14 @@ class Mandrill::WebHook::EventDecorator < Hash
   # Inbound messages: references 'from_email' message attribute.
   # Send/Open/Click messages: references 'sender' message attribute.
   def sender_email
-    msg['from_email']||msg['sender']
+    msg['from_email'] || msg['sender'] || reject['sender']
   end
 
   # Returns the subject user email address.
   # Inbound messages: references 'email' message attribute (represents the sender).
   # Send/Open/Click messages: references 'email' message attribute (represents the recipient).
   def user_email
-    msg['email']
+    msg['email'] || reject['email']
   end
 
   # Returns an array of all unique recipients (to/cc)
