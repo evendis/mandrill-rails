@@ -1,18 +1,53 @@
 [
   {
-    "type": "blacklist",
-    "action": "add",
-    "reject": {
-      "reason": "test",
-      "detail": "this is a mock event, replace with a real example when available",
-      "last_event_at": "2015-01-01 01:02:03",
-      "email": "test@example.net",
-      "created_at": "2015-02-01 01:02:03",
-      "expires_at": "2016-01-01 01:02:03",
-      "expired": "false",
-      "subaccount": "",
-      "sender": "sender@example.net"
-    },
-    "ts": 1350377135
+    "type":"blacklist",
+    "action":"add",
+    "reject":
+      { 
+        "reason":"hard-bounce",
+        "detail":"Example detail",
+        "last_event_at":"2014-02-01 12:43:56",
+        "email":"example.webhook@mandrillapp.com",
+        "created_at":"2014-01-15 11:32:19",
+        "expires_at":"2020-04-02 12:09:18",
+        "expired":false,
+        "subaccount":"example_subaccount",
+        "sender":"example.sender@mandrillapp.com"
+      },
+    "ts":1438785792
+  },
+  {
+    "type":"blacklist",
+    "action":"change",
+    "reject":
+      {
+        "reason":"hard-bounce",
+        "detail":"Example detail",
+        "last_event_at":"2014-02-01 12:43:56",
+        "email":"example.webhook@mandrillapp.com",
+        "created_at":"2014-01-15 11:32:19",
+        "expires_at":"2020-04-02 12:09:18",
+        "expired":false,
+        "subaccount":"example_subaccount",
+        "sender":"example.sender@mandrillapp.com"
+      },
+    "ts":1438785792
+  },
+  {
+    "type":"blacklist",
+    "action":"remove",
+    "reject":
+      {
+        "reason":"hard-bounce",
+        "detail":"Example detail",
+        "last_event_at":"2014-02-01 12:43:56",
+        "email":"example.webhook@mandrillapp.com",
+        "created_at":"2014-01-15 11:32:19",
+        "expires_at":"2020-04-02 12:09:18",
+        "expired":false,
+        "subaccount":"example_subaccount",
+        "sender":"example.sender@mandrillapp.com"
+      },
+    "ts":1438785792
   }
 ]
