@@ -153,15 +153,15 @@ describe Mandrill::WebHook::EventDecorator do
       :event_type => 'sync',
       :sync_type => 'blacklist',
       :reject => {
-        "reason"=>"test",
-        "detail"=>"this is a mock event, replace with a real example when available",
-        "last_event_at"=>"2015-01-01 01:02:03",
-        "email"=>"test@example.net",
-        "created_at"=>"2015-02-01 01:02:03",
-        "expires_at"=>"2016-01-01 01:02:03",
-        "expired"=>"false",
-        "subaccount"=>"",
-        "sender"=>"sender@example.net"
+        "reason"=>"hard-bounce",
+        "detail"=>"Example detail",
+        "last_event_at"=>"2014-02-01 12:43:56",
+        "email"=>"example.webhook@mandrillapp.com",
+        "created_at"=>"2014-01-15 11:32:19",
+        "expires_at"=>"2020-04-02 12:09:18",
+        "expired"=>false,
+        "subaccount"=>"example_subaccount",
+        "sender"=>"example.sender@mandrillapp.com"
       },
       :subject => nil,
       :message_id => nil,
@@ -169,8 +169,8 @@ describe Mandrill::WebHook::EventDecorator do
       :in_reply_to => nil,
       :references => [],
       :headers => {},
-      :sender_email => "sender@example.net",
-      :user_email => "test@example.net",
+      :sender_email => "example.sender@mandrillapp.com",
+      :user_email => "example.webhook@mandrillapp.com",
       :recipients => [],
       :recipient_emails => [],
       :message_body => nil,
@@ -181,10 +181,10 @@ describe Mandrill::WebHook::EventDecorator do
     'sync_whitelist' => {
       :event_type => 'sync',
       :sync_type => 'whitelist',
-      :reject => {
-        "detail"=>"this is a mock event, replace with a real example when available",
-        "email"=>"test@example.net",
-        "created_at"=>"2015-02-01 01:02:03"
+      :entry => {
+        "detail"=>"example details",
+        "email"=>"example.webhook@mandrillapp.com",
+        "created_at"=>"2014-01-15 12:03:19"
       },
       :subject => nil,
       :message_id => nil,
@@ -193,7 +193,7 @@ describe Mandrill::WebHook::EventDecorator do
       :references => [],
       :headers => {},
       :sender_email => nil,
-      :user_email => "test@example.net",
+      :user_email => "example.webhook@mandrillapp.com",
       :recipients => [],
       :recipient_emails => [],
       :message_body => nil,
