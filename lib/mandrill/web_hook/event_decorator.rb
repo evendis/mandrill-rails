@@ -54,7 +54,7 @@ class Mandrill::WebHook::EventDecorator < Hash
   # Inbound events: references 'Message-Id' header.
   # Send/Open/Click events: references '_id' message attribute.
   def message_id
-    headers['Message-Id'] || msg['_id']
+    headers['Message-Id'] || msg['_id'] || self['_id']
   end
 
   # Returns the Mandrill message version.
