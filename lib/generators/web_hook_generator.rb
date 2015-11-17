@@ -5,13 +5,16 @@ module Mandrill
     module Generators
       class WebHookGenerator < ::Rails::Generators::Base
         namespace 'mandrill'
+        desc 'Generates a controller and routes for Mandrill web hooks.'
         argument :name, type: :string
-        class_option :pluralize_names, type: :boolean, default: false,
+        class_option :pluralize_names, aliases: '-p', type: :boolean, default: false,
                                     desc: 'Pluralize names in route and controller'
+        class_option :routes, type: :boolean, default: true,
+                                    desc: 'Creates routes for web hooks'
+        class_option :controller, type: :boolean, default: true,
+                                    desc: 'Creates a controller for web hooks'
 
         source_root File.expand_path("../templates", __FILE__)
-
-        desc 'Generates a controller and routes for Mandrill webhooks.'
 
         def initialize(args, *options)
           args[0] = args[0].dup if args[0].is_a?(String) && args[0].frozen?
@@ -20,6 +23,7 @@ module Mandrill
         end
 
         def add_routes
+          return unless options.routes?
           hook_route = "resource :#{resource_name}"
 
           controller = controller_path
@@ -27,6 +31,12 @@ module Mandrill
           hook_route << %Q(, :controller => '#{controller}')
           hook_route << %Q(, :only => [:show,:create])
           route hook_route
+        end
+
+        def add_controller
+          return unless options.controller?
+          @controller_name = class_name
+          template 'controller.rb', controller_destination
         end
     
       private
@@ -40,7 +50,11 @@ module Mandrill
         end
 
         def class_name
-          @class_name ||= (@class_path + [file_name]).map!(&:camelize).join('::')
+          @class_name ||= (@class_path + [resource_name]).map!(&:camelize).join('::')
+        end
+
+        def controller_destination
+          "app/controllers/#{controller_path}_controller.rb"
         end
 
         def controller_path

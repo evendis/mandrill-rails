@@ -11,8 +11,6 @@ describe Mandrill::Rails::Generators::WebHookGenerator, type: :generator do
   end
 
   describe 'route generation' do
-    before { @route_path = "#{destination_root}/config/routes.rb" }
-
     context 'with no pluralized option' do
       context 'with simple names' do
         before { run_generator %w(inbox) }
@@ -100,6 +98,136 @@ describe Mandrill::Rails::Generators::WebHookGenerator, type: :generator do
             directory 'config' do
               file 'routes.rb' do
                 contains match
+              end
+            end
+          }
+        end
+      end
+    end
+  end
+
+  describe 'controller generation' do
+    context 'with controller explicitly skipped' do
+      before { run_generator %w(inbox --skip-controller) }
+
+      it 'does not create a controller file' do
+        expect(destination_root).to have_structure {
+          directory 'app' do
+            directory 'controllers' do
+              no_file 'inbox_controller.rb'
+            end
+          end
+        }
+      end
+    end
+
+    context 'with no pluralized option' do
+      context 'with simple names' do
+        before { run_generator %w(inbox) }
+
+        it 'creates a proper controller file' do
+          match = 'class InboxController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                file 'inbox_controller.rb' do
+                  contains match
+                end
+              end
+            end
+          }
+        end
+      end
+
+      context 'with namespaced names' do
+        before { run_generator %w(hooks/inbox) }
+
+        it 'creates a proper controller file' do
+          match = 'class Hooks::InboxController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                directory 'hooks' do
+                  file 'inbox_controller.rb' do
+                    contains match
+                  end
+                end
+              end
+            end
+          }
+        end
+      end
+
+      context 'with capitalized names' do
+        before { run_generator %w(hooks/Inbox) }
+
+        it 'creates a proper controller file' do
+          match = 'class Hooks::InboxController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                directory 'hooks' do
+                  file 'inbox_controller.rb' do
+                    contains match
+                  end
+                end
+              end
+            end
+          }
+        end
+      end
+    end
+
+    context 'with an explicit pluralized option' do
+      context 'with simple names' do
+        before { run_generator %w(inbox --pluralize_names) }
+
+        it 'creates a proper controller file' do
+          match = 'class InboxesController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                file 'inboxes_controller.rb' do
+                  contains match
+                end
+              end
+            end
+          }
+        end
+      end
+
+      context 'with namespaced names' do
+        before { run_generator %w(hooks/inbox --pluralize_names) }
+
+        it 'creates a proper controller file' do
+          match = 'class Hooks::InboxesController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                directory 'hooks' do
+                  file 'inboxes_controller.rb' do
+                    contains match
+                  end
+                end
+              end
+            end
+          }
+        end
+      end
+
+      context 'with capitalized names' do
+        before { run_generator %w(hooks/Inboxes --pluralized_names) }
+
+        it 'creates a proper controller file' do
+          match = 'class Hooks::InboxesController < ApplicationController'
+          expect(destination_root).to have_structure {
+            directory 'app' do
+              directory 'controllers' do
+                directory 'hooks' do
+                  file 'inboxes_controller.rb' do
+                    contains match
+                  end
+                end
               end
             end
           }
