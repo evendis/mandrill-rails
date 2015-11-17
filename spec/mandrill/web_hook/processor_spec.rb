@@ -90,13 +90,6 @@ describe Mandrill::WebHook::Processor do
           end
         end
         context "and default missing handler behaviour" do
-          before do
-            class ::Rails
-            end
-          end
-          after do
-            Object.send(:remove_const, :Rails)
-          end
           it "logs an error" do
             processor.on_unhandled_mandrill_events = :log
             logger = double()
