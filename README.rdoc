@@ -16,7 +16,6 @@ FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the 
 * Requires Rails >= 3.0.3 (including 3.1, 3.2 and 4).
 
 Food for thought (upcoming features maybe)..
-* some generators may be handy to avoid the manual coding to wire up web hooks
 * I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
 
 == The Mandrill::Rails Cookbook
@@ -48,7 +47,29 @@ See the section below on 'Contributing to Mandrill::Rails' for more information.
 
 Say we have configured Mandrill to send requests to /inbox at our site (see the next recipes for how you do that).
 
-Once we have Mandrill::Rails in our project, we just need to do two things. There's no generator to help you do this at the moment, but it is pretty simple:
+Once we have Mandrill::Rails in our project, we just need to do two things. You can run a generator to do it for you, or you can configure things manually:
+
+==== Using the generator
+
+Run the generator and specify the name for your route and controller:
+
+    rails generate mandrill inbox
+
+This will create a resource route and corresponding controller at /inbox.
+
+If you need a namespaced controller, specify it in the name:
+
+    rails generate mandrill hooks/inbox
+
+This creates an `inbox` route that points to the `Hooks:InboxController` class.
+
+If you prefer pluralized names, that can be specified with a flag:
+
+    rails generate mandrill inbox --pluralize_names
+
+This will create an `InboxesController` class and a resource route called `inboxes`.
+
+==== Manual configuration
 
 First, configure a resource route:
 
