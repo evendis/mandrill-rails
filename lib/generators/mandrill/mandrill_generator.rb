@@ -3,7 +3,7 @@ require 'rails/generators/named_base'
 module Mandrill
   module Rails
     module Generators
-      class WebHookGenerator < ::Rails::Generators::Base
+      class MandrillGenerator < ::Rails::Generators::NamedBase
         namespace 'mandrill'
         desc 'Generates a controller and routes for Mandrill web hooks.'
         argument :name, type: :string
@@ -14,7 +14,7 @@ module Mandrill
         class_option :controller, type: :boolean, default: true,
                                     desc: 'Creates a controller for web hooks'
 
-        source_root File.expand_path("../templates", __FILE__)
+        source_root File.expand_path("../../templates", __FILE__)
 
         def initialize(args, *options)
           args[0] = args[0].dup if args[0].is_a?(String) && args[0].frozen?

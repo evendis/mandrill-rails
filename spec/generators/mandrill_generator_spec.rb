@@ -1,8 +1,8 @@
 require 'spec_helper'
 require 'generator_spec'
-require 'generators/web_hook_generator'
+require 'generators/mandrill/mandrill_generator'
 
-describe Mandrill::Rails::Generators::WebHookGenerator, type: :generator do
+describe Mandrill::Rails::Generators::MandrillGenerator, type: :generator do
   destination File.expand_path("../../tmp", __FILE__)
 
   before do
