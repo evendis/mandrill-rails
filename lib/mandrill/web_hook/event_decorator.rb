@@ -84,7 +84,10 @@ class Mandrill::WebHook::EventDecorator < Hash
   # Returns the headers Hash.
   # Applicable events: inbound
   def headers
-    msg['headers']||{}
+    return {} if msg['headers'].nil? || msg['headers'].empty?
+    return msg['headers'].first if msg['headers'].is_a? Array
+
+    msg['headers']
   end
 
   # Returns the email (String) of the sender.
