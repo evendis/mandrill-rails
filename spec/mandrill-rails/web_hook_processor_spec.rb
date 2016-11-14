@@ -3,10 +3,10 @@ require 'spec_helper'
 class WebHookProcessorTestHarness
   # Mock some controller behaviour
   # TODO: we should probably start using a real controller harness for testing
-  def self.skip_before_filter(*args) ; @skip_before_filter_settings = args; end
-  def self.skip_before_filter_settings ; @skip_before_filter_settings; end
-  def self.before_filter(*args) ; @before_filter_settings = args ; end
-  def self.before_filter_settings ; @before_filter_settings; end
+  def self.skip_before_action(*args) ; @skip_before_filter_settings = args; end
+  def self.skip_before_action_settings ; @skip_before_filter_settings; end
+  def self.before_action(*args) ; @before_filter_settings = args ; end
+  def self.before_action_settings ; @before_filter_settings; end
   def head(*args) ; end
   attr_accessor :params, :request
 
@@ -22,15 +22,15 @@ describe Mandrill::Rails::WebHookProcessor do
     processor_class.on_unhandled_mandrill_events! nil
   end
 
-  describe "##skip_before_filter settings" do
-    subject { processor_class.skip_before_filter_settings }
+  describe "##skip_before_action settings" do
+    subject { processor_class.skip_before_action_settings }
     it "includes verify_authenticity_token" do
       expect(subject).to eql([:verify_authenticity_token])
     end
   end
 
-  describe "##before_filter settings" do
-    subject { processor_class.before_filter_settings }
+  describe "##before_action settings" do
+    subject { processor_class.before_action_settings }
     it "includes authenticate_mandrill_request" do
       expect(subject).to eql([:authenticate_mandrill_request!, {:only=>[:create]}])
     end
