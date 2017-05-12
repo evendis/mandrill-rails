@@ -25,7 +25,7 @@ describe Mandrill::Rails::WebHookProcessor do
   describe "##skip_before_action settings" do
     subject { processor_class.skip_before_action_settings }
     it "includes verify_authenticity_token" do
-      expect(subject).to eql([:verify_authenticity_token])
+      expect(subject).to eql([:verify_authenticity_token, { raise: false }])
     end
   end
 
