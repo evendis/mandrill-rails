@@ -3,10 +3,10 @@ require 'spec_helper'
 class WebHookProcessorTestHarness
   # Mock some controller behaviour
   # TODO: we should probably start using a real controller harness for testing
-  def self.skip_before_action(*args) ; @skip_before_filter_settings = args; end
-  def self.skip_before_action_settings ; @skip_before_filter_settings; end
-  def self.before_action(*args) ; @before_filter_settings = args ; end
-  def self.before_action_settings ; @before_filter_settings; end
+  def self.skip_before_action(*args) ; @skip_before_action_settings = args; end
+  def self.skip_before_action_settings ; @skip_before_action_settings; end
+  def self.before_action(*args) ; @before_action_settings = args ; end
+  def self.before_action_settings ; @before_action_settings; end
   def head(*args) ; end
   attr_accessor :params, :request
 
