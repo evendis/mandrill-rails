@@ -1,26 +1,28 @@
-= Mandrill::Rails {<img src="https://secure.travis-ci.org/evendis/mandrill-rails.png" />}[http://travis-ci.org/evendis/mandrill-rails]
+# Mandrill::Rails
+
+[![travis](https://secure.travis-ci.org/evendis/mandrill-rails.png)](http://travis-ci.org/evendis/mandrill-rails)
 
 The primary goal of Mandrill::Rails is to make supporting Mandrill web hooks as easy and Rails-native as possible. As other opportunities for better Rails integration of the Mandrill API are discovered, these may be rolled in too.
 
-Mandrill::Rails currently does not need or require any direct Mandrill API integration (such as provided by
-various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
-and {MailChimp}[https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp] gems).
+I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
+
+Mandrill::Rails currently does not need or require any direct Mandrill API integration, such as provided by
+various [Mandrill](https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill)
+and [MailChimp](https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp) gems.
 If you need direct API integration in addition to Mandrill::Rails features, you can choose to add whichever best meets your needs.
 
-FYI, {Mandrill}[http://mandrill.com/] is the transactional email service by the same folks who do MailChimp.
+FYI, [Mandrill](http://mandrill.com/) is the transactional email service by the same folks who do MailChimp.
 
-== Requirements and Known Limitations
 
-* Tested with MRI 1.9.3, 2.0.0, Rubinius (1.9 mode), JRuby (1.9 mode).
-* MRI 1.8.7, 1.9.2, JRuby 1.8 mode and Rubinius 1.8 mode do work but you must force activesupport < 4.
-* Requires Rails >= 3.0.3 (including 3.1, 3.2 and 4).
+## Requirements and Known Limitations
 
-Food for thought (upcoming features maybe)..
-* I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
+Mandrill::Rails 1.5.0+ only supports Rails 5 and MRI 2.2.2+.
 
-== The Mandrill::Rails Cookbook
+For Rails >= 3.0.3, use Mandrill::Rails 1.4.1.
 
-=== How do I install it for normal use?
+## The Mandrill::Rails Cookbook
+
+### How do I install it for normal use?
 
 Add this line to your application's Gemfile:
 
@@ -34,22 +36,22 @@ Or install it yourself as:
 
     $ gem install mandrill-rails
 
-=== How do I install it for gem development?
+### How do I install it for gem development?
 
-If you want to work on enhancements or fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run <tt>bundle</tt> to install development dependencies.
+If you want to work on enhancements or fix bugs in Mandrill::Rails, fork and clone the github repository. If you are using bundler (recommended), run `bundle` to install development dependencies.
 
-Run tests using <tt>rake</tt> or <tt>rake spec</tt>, and note that guard is also included with the development dependencies so
-you can kick-off continuous testing of changed files by running <tt>bundle exec guard</tt>.
+Run tests using `rake` or `rake spec`, and note that guard is also included with the development dependencies so
+you can kick-off continuous testing of changed files by running `bundle exec guard`.
 
 See the section below on 'Contributing to Mandrill::Rails' for more information.
 
-=== How do I configure my app for incoming Mandrill WebHooks?
+### How do I configure my app for incoming Mandrill WebHooks?
 
 Say we have configured Mandrill to send requests to /inbox at our site (see the next recipes for how you do that).
 
 Once we have Mandrill::Rails in our project, we just need to do two things. You can run a generator to do it for you, or you can configure things manually:
 
-==== Using the generator
+#### Using the generator
 
 Run the generator and specify the name for your route and controller:
 
@@ -69,7 +71,7 @@ If you prefer pluralized names, that can be specified with a flag:
 
 This will create an `InboxesController` class and a resource route called `inboxes`.
 
-==== Manual configuration
+#### Manual configuration
 
 First, configure a resource route:
 
@@ -85,19 +87,19 @@ That's all for the basic do-nothing endpoint setup. Note that we need both the G
 
 You can setup as many of these controllers as you need, if you wish different types of events to be handled by different routes.
 
-=== How do I configure Mandrill to send inbound email to my app?
+### How do I configure Mandrill to send inbound email to my app?
 
-See {Mandrill Inbound Domains}[https://mandrillapp.com/inbound]
+See [Mandrill Inbound Domains](https://mandrillapp.com/inbound)
 * enter the mail route you want to match on e.g. *@app.mydomain.com
 * set the WebHook enpoint to match e.g. http://mydomain.com/inbox
 
-=== How do I configure Mandrill to send WebHook requests to my app?
+### How do I configure Mandrill to send WebHook requests to my app?
 
-See {Mandrill WebHooks}[https://mandrillapp.com/settings/webhooks]
+See [Mandrill WebHooks](https://mandrillapp.com/settings/webhooks)
 * select the events you want to trigger on
 * set the "Post to URL" to point to your controller e.g. http://mydomain.com/inbox
 
-=== How do I handle specific Mandrill event payloads in my app?
+### How do I handle specific Mandrill event payloads in my app?
 
 Once we have configured Mandrill and setup our routes and controllers, our app will successfully
 receive WebHook event notifications from Mandrill. But we are not doing anything with the payload yet.
@@ -108,7 +110,7 @@ we are interested in.
 The list of available event types includes: inbound, send, hard_bounce, soft_bounce, open,
 click, spam, unsub, and reject.
 
-In our controller, we simply write a method called <tt>handle_<event-type></tt> and it will be called
+In our controller, we simply write a method called `handle_<event-type>` and it will be called
 for each event payload received. The event payload will be passed to this method
 as a Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
@@ -131,7 +133,7 @@ Note that Mandrill may send multiple event payloads in a single request, but you
 to worry about that. Each event payload will be unpacked from the request and dispatched to
 your handler individually.
 
-=== Do I need to handle all the event payloads that Mandrill send?
+### Do I need to handle all the event payloads that Mandrill send?
 
 No. It is optional. If you don't care to handle a specific payload type - then just don't implement the associated handler method.
 
@@ -156,14 +158,14 @@ directive to your controller:
     end
 
 
-=== How can I authenticate Mandrill Webhooks?
+### How can I authenticate Mandrill Webhooks?
 
 Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You can lookup and reset your API keys on the
 {Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
 
 If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
 
-To enable authentication, use the <tt>authenticate_with_mandrill_keys!</tt> method to set your API key. It is recommended you pull
+To enable authentication, use the `authenticate_with_mandrill_keys!` method to set your API key. It is recommended you pull
 your API keys from environment settings, or use some other means to avoid committing the API keys in your source code.
 
 For example, to handle inbound email:
@@ -178,11 +180,11 @@ For example, to handle inbound email:
 
     end
 
-=== How can I authenticate multiple Mandrill Webhooks in the same controller?
+### How can I authenticate multiple Mandrill Webhooks in the same controller?
 
 Sometimes you may have more than one WebHook sending requests to a single controller, for example if you have one handling 'click' events, and another sending inbound email. Mandrill assigns separate API keys to each of these.
 
-In this case, just add all the valid API keys you will allow with <tt>authenticate_with_mandrill_keys!</tt>, for example:
+In this case, just add all the valid API keys you will allow with `authenticate_with_mandrill_keys!`, for example:
 
     class InboxController < ApplicationController
       include Mandrill::Rails::WebHookProcessor
@@ -196,9 +198,9 @@ In this case, just add all the valid API keys you will allow with <tt>authentica
 
     end
 
-=== How do I pull apart the event_payload?
+### How do I pull apart the event_payload?
 
-The <tt>event_payload</tt> object passed to our handler represents a single event and is packaged
+The `event_payload` object passed to our handler represents a single event and is packaged
 as an Mandrill::WebHook::EventDecorator - basically a Hash with some additional methods to
 help extract payload-specific elements.
 
@@ -214,9 +216,9 @@ You can use it as a Hash (with String keys) to access all of the native elements
 If you would like examples of the actual data structures sent by Mandrill for different event types,
 some are included in the project source under spec/fixtures/webhook_examples.
 
-=== What additional methods does event_payload provide to help extract payload-specific elements?
+### What additional methods does event_payload provide to help extract payload-specific elements?
 
-In addition to providing full Hash-like access to the raw message, the <tt>event_payload</tt> object
+In addition to providing full Hash-like access to the raw message, the `event_payload` object
 (a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
 things you might need to do with the payload. Here are some examples (see
 {Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator]
@@ -247,16 +249,16 @@ for full details)
     # Applicable events: inbound
 
 
-=== How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
+### How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
 
 It's likely you may benefit from adding more application-specific intelligence to the
-<tt>event_payload</tt> object.
+`event_payload` object.
 
 There are many ways to do this, but it is quite legitimate to reopen the EventDecorator class and add your own methods
 if you wish.
 
-For example <tt>event_payload.user_email</tt> returns the subject user email address, but perhaps I will commonly want to
-match that with a user record in my system. Or I similarly want to resolve <tt>event_payload.recipient_emails</tt> to user records.
+For example `event_payload.user_email` returns the subject user email address, but perhaps I will commonly want to
+match that with a user record in my system. Or I similarly want to resolve `event_payload.recipient_emails` to user records.
 In this case, I could extend EventDecorator in my app like this:
 
     # Extends Mandrill::WebHook::EventDecorator with app-specific event payload transformation
@@ -274,9 +276,9 @@ In this case, I could extend EventDecorator in my app like this:
 
     end
 
-=== How do I extract attachments from an inbound email?
+### How do I extract attachments from an inbound email?
 
-The EventDecorator class provides an <tt>attachments</tt> method to access an array of attachments (if any).
+The EventDecorator class provides an `attachments` method to access an array of attachments (if any).
 Each attachment is encapsulated in a class that describes the name, mime type, raw and decoded content.
 
 For example:
@@ -303,9 +305,9 @@ For example:
     end
 
 
-=== How do I extract images from an inbound email?
+### How do I extract images from an inbound email?
 
-The EventDecorator class provides an <tt>images</tt> method to access an array of images (if any).
+The EventDecorator class provides an `images` method to access an array of images (if any).
 Each image is encapsulated in a class that describes the name, mime type, raw and decoded content.
 
 For example:
@@ -330,7 +332,7 @@ For example:
     end
 
 
-=== How do I use Mandrill API features with Mandrill::Rails?
+### How do I use Mandrill API features with Mandrill::Rails?
 
 Mandrill::Rails currently does not need or require any direct Mandrill API integration (such as provided by
 various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
@@ -339,7 +341,7 @@ If you need direct API integration in addition to Mandrill::Rails features,
 you can choose to add whichever best meets your needs and use as normal.
 
 
-== Contributing to Mandrill::Rails
+## Contributing to Mandrill::Rails
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it
@@ -349,7 +351,7 @@ you can choose to add whichever best meets your needs and use as normal.
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the gemspec, Rakefile, version, or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so I can cherry-pick around it.
 
-== Copyright
+## Copyright
 
 Copyright (c) 2012 Paul Gallagher. See LICENSE for further details.
 
