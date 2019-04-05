@@ -31,6 +31,8 @@
 #   end
 #
 module Mandrill::Rails::WebHookProcessor
+  Undefined = Object.new.freeze
+
   extend ActiveSupport::Concern
 
   included do
@@ -71,6 +73,15 @@ module Mandrill::Rails::WebHookProcessor
       @on_unhandled_mandrill_events
     end
 
+    # Sets or gets the callback host
+    def callback_host(callback_host = Undefined)
+      if Undefined === callback_host
+        @callback_host
+      else
+        @callback_host = callback_host
+      end
+    end
+
     def ignore_unhandled_events!
       on_unhandled_mandrill_events! :ignore
     end
@@ -90,7 +101,10 @@ module Mandrill::Rails::WebHookProcessor
 
   # Handles controller :create action (corresponds to a POST from Mandrill).
   def create
-    processor = Mandrill::WebHook::Processor.new(params, self)
+    processor = Mandrill::WebHook::Processor.new(
+      params,
+      self.class.callback_host || self
+    )
     processor.on_unhandled_mandrill_events = self.class.on_unhandled_mandrill_events!
     processor.run!
     head(:ok)

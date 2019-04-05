@@ -98,6 +98,34 @@ describe Mandrill::Rails::WebHookProcessor do
       processor_instance.create
     end
 
+    context "with a custom callback host" do
+      let(:custom_callback_host) { double('CallbackHost') }
+      let(:params) do
+        {
+          "mandrill_events" => JSON.dump([
+            {
+              "event" => "hard_bounce"
+            }
+          ])
+        }
+      end
+      before do
+        WebHookProcessorTestHarness.callback_host(custom_callback_host)
+        processor_instance.params = params
+      end
+      after do
+        WebHookProcessorTestHarness.callback_host(nil)
+      end
+      it "returns head(:ok) and dispatces the event to callback host" do
+        expect(processor_instance).to receive(:head).with(:ok)
+        expect_any_instance_of(Mandrill::WebHook::Processor).to receive(:on_unhandled_mandrill_events=).with(:log)
+        expect(custom_callback_host).to receive(:handle_hard_bounce).with(
+          Mandrill::WebHook::EventDecorator["event" => "hard_bounce"]
+        )
+        processor_instance.create
+      end
+    end
+
     context "when unhandled events set to raise exceptions" do
       it "delegates the setting to the processor" do
         processor_instance.class.unhandled_events_raise_exceptions!
