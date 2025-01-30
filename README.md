@@ -15,7 +15,9 @@ FYI, [Mandrill](http://mandrill.com/) is the transactional email service by the 
 
 ## Requirements and Known Limitations
 
-Mandrill::Rails 1.5.0+ only supports Rails 5 and MRI 2.2.2+.
+For Rails 7+, use [Action Mailbox](https://guides.rubyonrails.org/v7.1/action_mailbox_basics.html) instead. Mandrill::Rails is no longer being maintained for newer Rails versions.
+
+Mandrill::Rails 1.5.0+ supports Rails 5 and Rails 6.
 
 For Rails >= 3.0.3, use Mandrill::Rails 1.4.1.
 
