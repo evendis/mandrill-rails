@@ -13,7 +13,6 @@ If you need direct API integration in addition to Mandrill::Rails features, you 
 
 FYI, [Mandrill](http://mandrill.com/) is the transactional email service by the same folks who do MailChimp.
 
-
 ## Requirements and Known Limitations
 
 Mandrill::Rails 1.5.0+ only supports Rails 5 and MRI 2.2.2+.
@@ -30,11 +29,11 @@ Add this line to your application's Gemfile:
 
 And then execute:
 
-    $ bundle
+    bundle
 
 Or install it yourself as:
 
-    $ gem install mandrill-rails
+    gem install mandrill-rails
 
 ### How do I install it for gem development?
 
@@ -90,14 +89,16 @@ You can setup as many of these controllers as you need, if you wish different ty
 ### How do I configure Mandrill to send inbound email to my app?
 
 See [Mandrill Inbound Domains](https://mandrillapp.com/inbound)
+
 * enter the mail route you want to match on e.g. *@app.mydomain.com
-* set the WebHook enpoint to match e.g. http://mydomain.com/inbox
+* set the WebHook enpoint to match e.g. <http://mydomain.com/inbox>
 
 ### How do I configure Mandrill to send WebHook requests to my app?
 
 See [Mandrill WebHooks](https://mandrillapp.com/settings/webhooks)
+
 * select the events you want to trigger on
-* set the "Post to URL" to point to your controller e.g. http://mydomain.com/inbox
+* set the "Post to URL" to point to your controller e.g. <http://mydomain.com/inbox>
 
 ### How do I handle specific Mandrill event payloads in my app?
 
@@ -157,11 +158,10 @@ directive to your controller:
       unhandled_events_raise_exceptions!
     end
 
-
 ### How can I authenticate Mandrill Webhooks?
 
-Mandrill now supports {webhook authentication}[http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests] which can help prevent unauthorised posting to your webhook handlers. You can lookup and reset your API keys on the
-{Mandrill WebHook settings}[https://mandrillapp.com/settings/webhooks] page.
+Mandrill now supports [webhook authentication](http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests) which can help prevent unauthorised posting to your webhook handlers. You can lookup and reset your API keys on the
+[Mandrill WebHook settings](https://mandrillapp.com/settings/webhooks) page.
 
 If you do not configure your webhook API key, then the handlers will continue to work fine - they just won't be authenticated.
 
@@ -221,7 +221,7 @@ some are included in the project source under spec/fixtures/webhook_examples.
 In addition to providing full Hash-like access to the raw message, the `event_payload` object
 (a Mandrill::WebHook::EventDecorator) provides a range of helper methods for some of the more obvious
 things you might need to do with the payload. Here are some examples (see
-{Mandrill::WebHook::EventDecorator class documentation}[http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator]
+[Mandrill::WebHook::EventDecorator class documentation](http://rubydoc.info/gems/mandrill-rails/Mandrill/WebHook/EventDecorator)
 for full details)
 
     event_payload.message_id
@@ -247,7 +247,6 @@ for full details)
     # Returns an array of all unique recipient emails (to/cc)
     #   [ email, email, .. ]
     # Applicable events: inbound
-
 
 ### How to extend Mandrill::WebHook::EventDecorator for application-specific payload handling?
 
@@ -304,7 +303,6 @@ For example:
       end
     end
 
-
 ### How do I extract images from an inbound email?
 
 The EventDecorator class provides an `images` method to access an array of images (if any).
@@ -331,15 +329,13 @@ For example:
       end
     end
 
-
 ### How do I use Mandrill API features with Mandrill::Rails?
 
 Mandrill::Rails currently does not need or require any direct Mandrill API integration (such as provided by
-various {Mandrill}[https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill]
-and {MailChimp}[https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp] gems).
+various [Mandrill](https://rubygems.org/search?utf8=%E2%9C%93&query=mandrill)
+and [MailChimp](https://rubygems.org/search?utf8=%E2%9C%93&query=mailchimp) gems).
 If you need direct API integration in addition to Mandrill::Rails features,
 you can choose to add whichever best meets your needs and use as normal.
-
 
 ## Contributing to Mandrill::Rails
 
@@ -354,4 +350,3 @@ you can choose to add whichever best meets your needs and use as normal.
 ## Copyright
 
 Copyright (c) 2012 Paul Gallagher. See LICENSE for further details.
-
