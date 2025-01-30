@@ -2,7 +2,6 @@ require 'pathname'
 require 'json'
 
 module FixturesHelper
-
   def webhook_examples_path
     Pathname.new(File.dirname(__FILE__)).join('..','fixtures','webhook_examples')
   end
@@ -30,10 +29,7 @@ module FixturesHelper
   def payload_example(sample_name)
     payload_examples_path.join(sample_name).read
   end
-
-
 end
-
 
 RSpec.configure do |conf|
   conf.include FixturesHelper
