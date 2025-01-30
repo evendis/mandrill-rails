@@ -1,7 +1,5 @@
 # Mandrill::Rails
 
-[![travis](https://secure.travis-ci.org/evendis/mandrill-rails.png)](http://travis-ci.org/evendis/mandrill-rails)
-
 The primary goal of Mandrill::Rails is to make supporting Mandrill web hooks as easy and Rails-native as possible. As other opportunities for better Rails integration of the Mandrill API are discovered, these may be rolled in too.
 
 I thought about implementing this as an engine, but the overhead did not seem appropriate. Maybe that view will change..
