@@ -1,16 +1,11 @@
-name: CI
-
-on:
-  push:
-    branches: ['*']
-
+name: Specs
+on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-ruby@v1
-        with:
-          ruby-version: '3.0.5'
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+          ruby-version: '3.0'
       - run: bundle install
       - run: bundle exec rspec
